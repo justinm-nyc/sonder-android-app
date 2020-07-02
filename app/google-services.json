@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "596189550732",
+    "firebase_url": "https://sonderapp-43ab9.firebaseio.com",
+    "project_id": "sonderapp-43ab9",
+    "storage_bucket": "sonderapp-43ab9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:596189550732:android:f1f63dcb6a1fdd8ff4c3a9",
+        "android_client_info": {
+          "package_name": "com.android.sonder_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "596189550732-cdr0re241gdaobjmkci4vn4hfqimbhkm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.android.sonder_app",
+            "certificate_hash": "da6e4e7eaec6909cffde97714f69abbb31b9cfb1"
+          }
+        },
+        {
+          "client_id": "596189550732-aqifqq932ic1lvkrupn8e5vvamr6lt93.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBekngcigqkSiM5enqjqF5oWqg-TqGUvRc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "596189550732-aqifqq932ic1lvkrupn8e5vvamr6lt93.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
