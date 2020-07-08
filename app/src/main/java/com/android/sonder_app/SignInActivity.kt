@@ -66,11 +66,11 @@ class SignInActivity : AppCompatActivity() {
 
                             val menuListener = object : ValueEventListener {
                                 override fun onCancelled(error: DatabaseError) {
-                                    progressBar.visibility = View.INVISIBLE;
+                                    progressBar.visibility = View.GONE;
                                 }
 
                                 override fun onDataChange(snapshot: DataSnapshot) {
-                                    progressBar.visibility = View.INVISIBLE;
+                                    progressBar.visibility = View.GONE;
                                     val intent =
                                         Intent(this@SignInActivity, MainActivity::class.java)
                                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
