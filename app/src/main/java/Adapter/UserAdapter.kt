@@ -5,11 +5,9 @@ import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.annotation.NonNull
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Fragment.ProfileFragment
@@ -29,7 +27,6 @@ class UserAdapter: RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private var mContext: Context
     private var mUser: List<User>
-
     private lateinit var firebaseUser: FirebaseUser
 
     constructor(mContext: Context, mUser: List<User>) : super() {
