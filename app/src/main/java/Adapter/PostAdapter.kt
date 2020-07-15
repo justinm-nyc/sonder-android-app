@@ -1,6 +1,7 @@
 package Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +16,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 
-class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
+class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private var mContext: Context
     private var mPost: List<Post>
     private lateinit var firebaseUser: FirebaseUser
@@ -26,7 +27,7 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view: View = LayoutInflater.from(mContext).inflate(R.layout.post_item,parent, false)
+        val view: View = LayoutInflater.from(mContext).inflate(R.layout.post_item, parent, false)
         return ViewHolder(view)
 
     }
@@ -41,28 +42,46 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         Glide.with(mContext).load(post.getPostimage()).into(holder.postImage)
 
-        if(post.getDescription().equals("")){
+        if (post.getDescription().equals("")) {
             holder.description.visibility = View.GONE
         } else {
             holder.description.visibility = View.VISIBLE
             holder.description.text = post.getDescription()
         }
 
-        publisherInfo(holder.imageProfile,holder.username, holder.publisher,post.getPublisher())
+        publisherInfo(holder.imageProfile, holder.username, holder.publisher, post.getPublisher())
 
-        isLikes(post.getPostid(),holder.like)
-        numLikes(holder.likes,post.getPostid())
+        isLiked(post.getPostid(), holder.like)
+        numLikes(holder.likes, post.getPostid())
+
+        getComments(post.getPostid(),holder.comments)
+
+        holder.comment.setOnClickListener {
+            val intent = Intent(mContext, CommentsActivity::class.java)
+            intent.putExtra("postid",post.getPostid())
+            intent.putExtra("publisherid", post.getPublisher())
+            mContext.startActivity(intent)
+        }
+
+        holder.comments.setOnClickListener {
+            val intent = Intent(mContext, CommentsActivity::class.java)
+            intent.putExtra("postid",post.getPostid())
+            intent.putExtra("publisherid", post.getPublisher())
+            mContext.startActivity(intent)
+        }
 
         holder.like.setOnClickListener {
             if (holder.like.tag == "like") {
-                FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid()).child(firebaseUser.uid).setValue(true)
+                FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid())
+                    .child(firebaseUser.uid).setValue(true)
             } else {
-                FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid()).child(firebaseUser.uid).removeValue()
+                FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid())
+                    .child(firebaseUser.uid).removeValue()
             }
         }
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var imageProfile: ImageView = itemView.findViewById(R.id.image_profile)
         var postImage: ImageView = itemView.findViewById(R.id.post_image)
         var like: ImageView = itemView.findViewById(R.id.like)
@@ -77,16 +96,28 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     }
 
-    private fun isLikes(postid: String, imageView: ImageView){
+    private fun getComments(postid: String, comments: TextView){
+        var reference = FirebaseDatabase.getInstance().reference.child("Comments").child(postid)
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                comments.text = "View All" + dataSnapshot.childrenCount + "Comments"
+            }
+        })
+    }
+
+    private fun isLiked(postid: String, imageView: ImageView) {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
         var reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
-        reference.addValueEventListener(object: ValueEventListener {
+        reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(dataSnapshot.child(firebaseUser.uid).exists()){
+                if (dataSnapshot.child(firebaseUser.uid).exists()) {
                     imageView.setImageResource(R.drawable.ic_liked)
                     imageView.setTag("liked")
                 } else {
@@ -97,9 +128,9 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
         })
     }
 
-    private fun numLikes(likes: TextView, postid: String){
+    private fun numLikes(likes: TextView, postid: String) {
         var reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
-        reference.addValueEventListener(object: ValueEventListener {
+        reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
             }
@@ -110,9 +141,14 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
         })
     }
 
-    private fun publisherInfo(image_profile: ImageView, username: TextView, publisher: TextView, userid: String){
+    private fun publisherInfo(
+        image_profile: ImageView,
+        username: TextView,
+        publisher: TextView,
+        userid: String
+    ) {
         var reference = FirebaseDatabase.getInstance().getReference("Users").child(userid)
-        reference.addValueEventListener(object: ValueEventListener {
+        reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
             }
