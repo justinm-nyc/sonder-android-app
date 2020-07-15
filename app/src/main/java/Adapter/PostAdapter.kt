@@ -49,6 +49,17 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         publisherInfo(holder.imageProfile,holder.username, holder.publisher,post.getPublisher())
+
+        isLikes(post.getPostid(),holder.like)
+        numLikes(holder.likes,post.getPostid())
+
+        holder.like.setOnClickListener {
+            if (holder.like.tag == "like") {
+                FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid()).child(firebaseUser.uid).setValue(true)
+            } else {
+                FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid()).child(firebaseUser.uid).removeValue()
+            }
+        }
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
@@ -66,11 +77,44 @@ class PostAdapter: RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     }
 
+    private fun isLikes(postid: String, imageView: ImageView){
+        firebaseUser = FirebaseAuth.getInstance().currentUser!!
+        var reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
+        reference.addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.child(firebaseUser.uid).exists()){
+                    imageView.setImageResource(R.drawable.ic_liked)
+                    imageView.setTag("liked")
+                } else {
+                    imageView.setImageResource(R.drawable.ic_like)
+                    imageView.setTag("like")
+                }
+            }
+        })
+    }
+
+    private fun numLikes(likes: TextView, postid: String){
+        var reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
+        reference.addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                likes.text = dataSnapshot.childrenCount.toString() + " likes"
+            }
+        })
+    }
+
     private fun publisherInfo(image_profile: ImageView, username: TextView, publisher: TextView, userid: String){
         var reference = FirebaseDatabase.getInstance().getReference("Users").child(userid)
         reference.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
