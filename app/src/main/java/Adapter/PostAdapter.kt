@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.android.sonder_app.CommentsActivity
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
 import com.android.sonder_app.R
@@ -29,7 +30,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(mContext).inflate(R.layout.post_item, parent, false)
         return ViewHolder(view)
-
     }
 
     override fun getItemCount(): Int {
@@ -38,11 +38,11 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        var post: Post = mPost.get(position)
+        var post: Post = mPost[position]
 
         Glide.with(mContext).load(post.getPostimage()).into(holder.postImage)
 
-        if (post.getDescription().equals("")) {
+        if (post.getDescription() == "") {
             holder.description.visibility = View.GONE
         } else {
             holder.description.visibility = View.VISIBLE
@@ -54,7 +54,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         isLiked(post.getPostid(), holder.like)
         numLikes(holder.likes, post.getPostid())
 
-        getComments(post.getPostid(),holder.comments)
+        getComments(post.getPostid(), holder.comments)
 
         holder.comment.setOnClickListener {
             val intent = Intent(mContext, CommentsActivity::class.java)
@@ -93,7 +93,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         var comments: TextView = itemView.findViewById(R.id.comments)
         var description: TextView = itemView.findViewById(R.id.description)
         var publisher: TextView = itemView.findViewById(R.id.publisher)
-
     }
 
     private fun getComments(postid: String, comments: TextView){
@@ -103,7 +102,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                comments.text = "View All" + dataSnapshot.childrenCount + "Comments"
+                comments.text = "View All " + dataSnapshot.childrenCount + " Comments"
             }
         })
     }
@@ -132,7 +131,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         var reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -150,7 +148,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         var reference = FirebaseDatabase.getInstance().getReference("Users").child(userid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {

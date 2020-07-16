@@ -1,9 +1,11 @@
 package com.android.sonder_app
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import com.android.sonder_app.Fragment.HomeFragment
@@ -29,7 +31,18 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         bottomNavigationView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_UNLABELED
 
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
+        var intent: Bundle? = intent.extras
+
+        if(intent!=null){
+            val publisher: String? = intent.getString("publisherid")
+            val editor: SharedPreferences.Editor = getSharedPreferences("PREPS", Context.MODE_PRIVATE).edit()
+            editor.putString("profileid", publisher)
+            editor.apply()
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
+        } else {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, HomeFragment()).commit()
+        }
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
