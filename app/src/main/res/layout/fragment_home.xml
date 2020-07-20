@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,29 +13,39 @@
       android:background="?android:attr/windowBackground">
 
       <androidx.appcompat.widget.Toolbar
+          android:id="@+id/toolbar"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:id="@+id/toolbar"
-          android:background="?android:attr/windowBackground">
+          android:background="@drawable/main_toolbar_gradient">
 
-          <RelativeLayout
+          <androidx.constraintlayout.widget.ConstraintLayout
+              android:id="@+id/relativeLayout"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
 
-              <ImageView
-                  android:layout_width="100dp"
-                  android:layout_height="35dp"
-                  android:layout_alignParentStart="true"
-                  android:layout_marginLeft="20dp"
-                  android:src="@drawable/logo"/>
-
-              <ImageView
+              <TextView
+                  android:id="@+id/textView"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
-                  android:src="@drawable/ic_inbox"
+                  android:fontFamily="@font/sign_painter_regular"
+                  android:text="@string/app_name"
+                  android:textAlignment="center"
+                  android:textColor="@android:color/white"
+                  android:textSize="24sp"
+                  app:layout_constraintBottom_toBottomOf="parent"
+                  app:layout_constraintEnd_toStartOf="@+id/imageView"
+                  app:layout_constraintStart_toStartOf="parent"
+                  app:layout_constraintTop_toTopOf="parent" />
+
+              <ImageView
+                  android:id="@+id/imageView"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
                   android:layout_marginRight="10dp"
-                  android:layout_alignParentEnd="true"/>
-          </RelativeLayout>
+                  android:src="@drawable/ic_inbox"
+                  app:layout_constraintEnd_toEndOf="parent"
+                  app:layout_constraintTop_toTopOf="parent" />
+          </androidx.constraintlayout.widget.ConstraintLayout>
 
       </androidx.appcompat.widget.Toolbar>
 

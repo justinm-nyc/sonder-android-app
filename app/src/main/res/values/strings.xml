@@ -1,9 +1,11 @@
 <resources>
-    <string name="app_name">Sonder</string>
+    <string name="app_name">Travilous</string>
 
     <string name="home">Home</string>
     <string name="search">Search</string>
     <string name="notification">Notification</string>
     <string name="profile">Profile</string>
+
+
 
 </resources>
