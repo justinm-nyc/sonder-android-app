@@ -90,7 +90,7 @@ class SignUpActivity : AppCompatActivity() {
                     hashMap["imageurl"] = "https://firebasestorage.googleapis.com/v0/b/sonderapp-43ab9.appspot.com/o/placeholder.png?alt=media&token=407c5679-8e25-4cd5-adab-cdf85153b3c1"
                     reference.setValue(hashMap).addOnCompleteListener { task ->
                         if(task.isSuccessful) {
-                            progressBar.visibility = View.INVISIBLE
+                            progressBar.visibility = View.GONE
                             val intent = Intent(this, MainActivity::class.java)
                             intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
@@ -100,7 +100,7 @@ class SignUpActivity : AppCompatActivity() {
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception);
                     // If sign in fails, display a message to the user.
                     Toast.makeText(baseContext, "You are not registered with this email and password!",
                         Toast.LENGTH_SHORT).show()
