@@ -2,6 +2,7 @@ package Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 
 class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
+    private val TAG = "MyMessage:"
     private var mContext: Context
     private var mPost: List<Post>
     private lateinit var firebaseUser: FirebaseUser
@@ -53,14 +55,23 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         isLiked(post.getPostid(), holder.like)
         numLikes(holder.likes, post.getPostid())
-
         getComments(post.getPostid(), holder.comments)
+        isSaved(post.getPostid() ,holder.save)
 
         holder.comment.setOnClickListener {
             val intent = Intent(mContext, CommentsActivity::class.java)
             intent.putExtra("postid",post.getPostid())
             intent.putExtra("publisherid", post.getPublisher())
             mContext.startActivity(intent)
+        }
+
+        holder.save.setOnClickListener {
+            Log.d(TAG, "save was clicked");
+            if(holder.save.tag == "save"){
+                FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid).child(post.getPostid()).setValue(true)
+            } else {
+                FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid).child(post.getPostid()).removeValue()
+            }
         }
 
         holder.comments.setOnClickListener {
@@ -159,4 +170,25 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         })
     }
 
+    fun isSaved(postId: String, imageView: ImageView){
+        var firebaseUser: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
+        var reference = FirebaseDatabase.getInstance().getReference().child("Saves").child(firebaseUser.getUid())
+
+        reference.addValueEventListener(object: ValueEventListener{
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if(dataSnapshot.child(postId).exists()){
+                    imageView.setImageResource(R.drawable.ic_save_black)
+                    imageView.tag = "saved"
+                } else {
+                    imageView.setImageResource(R.drawable.ic_save)
+                    imageView.tag = "save"
+
+                }
+            }
+        })
+    }
 }

@@ -54,6 +54,11 @@ class ProfileFragment : Fragment() {
     private lateinit var myPhotoAdapter: MyPhotoAdapter
     private lateinit var postList: ArrayList<Post>
 
+    private lateinit var mySaves: ArrayList<String>
+    private lateinit var recyclerView_saves: RecyclerView
+    private lateinit var myPhotoAdapter_saves: MyPhotoAdapter
+    private lateinit var postListSaves: ArrayList<Post>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,7 +70,6 @@ class ProfileFragment : Fragment() {
         profileid = prefs.getString("profileid", "none")!!
 
         Log.d(TAG, "profileid is $profileid");
-
         imageProfile = view.findViewById(R.id.image_profile)
         options = view.findViewById(R.id.options)
         posts = view.findViewById(R.id.posts)
@@ -86,10 +90,23 @@ class ProfileFragment : Fragment() {
         myPhotoAdapter = MyPhotoAdapter(context!!, postList)
         recyclerView.adapter = myPhotoAdapter
 
+
+        recyclerView_saves = view.findViewById(R.id.recycler_view_saves)
+        recyclerView_saves.setHasFixedSize(true)
+        val linearLayoutManagerSaves: LinearLayoutManager = GridLayoutManager(context, 3)
+        recyclerView_saves.layoutManager = linearLayoutManagerSaves
+        postListSaves = ArrayList<Post>()
+        myPhotoAdapter_saves = MyPhotoAdapter(context!!, postListSaves)
+        recyclerView_saves.adapter = myPhotoAdapter_saves
+
+        recyclerView.visibility = View.VISIBLE
+        recyclerView_saves.visibility = View.GONE
+
         userInfo()
         getFollowers()
         getNumPosts()
         myPhotos()
+        mysaves()
 
         if (profileid == firebaseUser.uid) {
             editProfile.text = "Edit Profile"
@@ -115,16 +132,27 @@ class ProfileFragment : Fragment() {
             }
         }
 
+        myPhotos.setOnClickListener {
+            Log.d(TAG, "myPhotos clicked");
+            recyclerView.visibility = View.VISIBLE
+            recyclerView_saves.visibility = View.GONE
+        }
+
+        savedPhotos.setOnClickListener {
+            Log.d(TAG, "savedPhotos clicked");
+            recyclerView.visibility = View.GONE
+            recyclerView_saves.visibility = View.VISIBLE
+        }
         return view
     }
 
-    fun userInfo() {
-        var reference: DatabaseReference =
+    private fun userInfo() {
+        val reference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("Users").child(profileid)
         reference.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -143,14 +171,13 @@ class ProfileFragment : Fragment() {
 
     }
 
-    fun checkFollow() {
-        var reference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.uid)
+    private fun checkFollow() {
+        val reference: DatabaseReference =
+            FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
                 .child("following")
         reference.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -164,7 +191,7 @@ class ProfileFragment : Fragment() {
         })
     }
 
-    fun getFollowers() {
+    private fun getFollowers() {
         var reference: DatabaseReference =
             FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
                 .child("following")
@@ -179,13 +206,13 @@ class ProfileFragment : Fragment() {
             }
         })
 
-        var reference1: DatabaseReference =
+        val reference1: DatabaseReference =
             FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
                 .child("followers")
         reference1.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -196,11 +223,11 @@ class ProfileFragment : Fragment() {
 
     }
 
-    fun getNumPosts() {
+    private fun getNumPosts() {
         var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -216,16 +243,16 @@ class ProfileFragment : Fragment() {
         })
     }
 
-    fun myPhotos() {
+    private fun myPhotos() {
         var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
-                    var post: Post = snapshot.getValue(Post::class.java)!!
+                    val post: Post = snapshot.getValue(Post::class.java)!!
                     if (post.getPublisher() == profileid) {
                         postList.add(post)
                     }
@@ -235,4 +262,44 @@ class ProfileFragment : Fragment() {
             }
         })
     }
+
+    private fun mysaves() {
+        Log.d(TAG, "mysaves() called");
+        mySaves = ArrayList<String>()
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Saves").child(firebaseUser.uid)
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    mySaves.add(snapshot.key!!)
+                }
+                readSaves()
+            }
+        })
+    }
+
+    fun readSaves() {
+        Log.d(TAG, "readSaves() was clicked");
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    val post: Post = snapshot.getValue(Post::class.java)!!
+                    for(id: String in mySaves){
+                        if(post.getPostid() == id){
+                            postListSaves.add(post)
+                        }
+                    }
+                }
+                myPhotoAdapter_saves.notifyDataSetChanged()
+            }
+        })
+    }
+
+
 }
