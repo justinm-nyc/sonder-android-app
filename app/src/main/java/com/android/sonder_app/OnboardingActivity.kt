@@ -94,11 +94,18 @@ class OnboardingActivity : AppCompatActivity() {
                 mBackBtn.visibility = View.INVISIBLE
 
                 mNextBtn.text = resources.getString(R.string.next)
+
+                mNextBtn.setTextColor(resources.getColor(R.color.colorBlue))
+                mBackBtn.setTextColor(resources.getColor(R.color.colorBlue))
+
                 mBackBtn.text = ""
             } else if ( position == mDots.size-1) {
                 mNextBtn.isEnabled = true
                 mBackBtn.isEnabled = true
                 mBackBtn.visibility = View.VISIBLE
+
+                mNextBtn.setTextColor(resources.getColor(R.color.colorBlue))
+                mBackBtn.setTextColor(resources.getColor(R.color.colorBlue))
 
                 mNextBtn.text = resources.getString(R.string.finish)
                 mBackBtn.text =  resources.getString(R.string.back)
@@ -109,6 +116,9 @@ class OnboardingActivity : AppCompatActivity() {
 
                 mNextBtn.text = resources.getString(R.string.next)
                 mBackBtn.text =  resources.getString(R.string.back)
+
+                mNextBtn.setTextColor(resources.getColor(R.color.colorPurple))
+                mBackBtn.setTextColor(resources.getColor(R.color.colorPurple))
             }
         }
     }
