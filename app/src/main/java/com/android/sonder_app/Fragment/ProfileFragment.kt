@@ -1,5 +1,6 @@
 package com.android.sonder_app.Fragment
 
+import Adapter.MyPhotoAdapter
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,6 +13,9 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
 
@@ -23,6 +27,8 @@ import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.post_item.*
 import kotlinx.android.synthetic.main.post_item.image_profile
+import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -44,6 +50,10 @@ class ProfileFragment : Fragment() {
     private lateinit var myPhotos: ImageButton
     private lateinit var savedPhotos: ImageButton
 
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var myPhotoAdapter: MyPhotoAdapter
+    private lateinit var postList: ArrayList<Post>
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -52,7 +62,7 @@ class ProfileFragment : Fragment() {
         var view = inflater.inflate(R.layout.fragment_profile, container, false)
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
         val prefs: SharedPreferences = context!!.getSharedPreferences("PREPS", Context.MODE_PRIVATE)
-        profileid= prefs.getString("profileid", "none")!!
+        profileid = prefs.getString("profileid", "none")!!
 
         Log.d(TAG, "profileid is $profileid");
 
@@ -68,11 +78,20 @@ class ProfileFragment : Fragment() {
         savedPhotos = view.findViewById(R.id.saved_photos)
         editProfile = view.findViewById(R.id.edit_profile)
 
+        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.setHasFixedSize(true)
+        val linearLayoutManager: LinearLayoutManager = GridLayoutManager(context, 3)
+        recyclerView.layoutManager = linearLayoutManager
+        postList = ArrayList<Post>()
+        myPhotoAdapter = MyPhotoAdapter(context!!, postList)
+        recyclerView.adapter = myPhotoAdapter
+
         userInfo()
         getFollowers()
         getNumPosts()
+        myPhotos()
 
-        if(profileid == firebaseUser.uid){
+        if (profileid == firebaseUser.uid) {
             editProfile.text = "Edit Profile"
         } else {
             checkFollow()
@@ -80,31 +99,36 @@ class ProfileFragment : Fragment() {
         }
 
         editProfile.setOnClickListener {
-            var btn: String = editProfile.getText().toString()
-            if(btn == "Edit Profile"){
+            var btn: String = editProfile.text.toString()
+            if (btn == "Edit Profile") {
                 //go to edit profile
-            } else if (btn == "follow"){
-                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid).child("following").child(profileid).setValue(true);
-                FirebaseDatabase.getInstance().reference.child("Follow").child(profileid).child("followers").child(firebaseUser.uid).setValue(true);
+            } else if (btn == "follow") {
+                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
+                    .child("following").child(profileid).setValue(true);
+                FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
+                    .child("followers").child(firebaseUser.uid).setValue(true);
             } else if (btn == "following") {
-                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid).child("following").child(profileid).removeValue()
-                FirebaseDatabase.getInstance().reference.child("Follow").child(profileid).child("followers").child(firebaseUser.uid).removeValue()
+                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
+                    .child("following").child(profileid).removeValue()
+                FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
+                    .child("followers").child(firebaseUser.uid).removeValue()
             }
         }
 
         return view
     }
 
-    fun userInfo(){
-        var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(profileid)
-        reference.addValueEventListener(object:
+    fun userInfo() {
+        var reference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Users").child(profileid)
+        reference.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(context == null){
+                if (context == null) {
                     return
                 }
                 var user: User? = dataSnapshot.getValue(User::class.java)
@@ -118,16 +142,19 @@ class ProfileFragment : Fragment() {
         })
 
     }
-    fun checkFollow(){
-        var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.uid).child("following")
-        reference.addValueEventListener(object:
+
+    fun checkFollow() {
+        var reference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference().child("Follow").child(firebaseUser.uid)
+                .child("following")
+        reference.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(dataSnapshot.child(profileid).exists()){
+                if (dataSnapshot.child(profileid).exists()) {
                     editProfile.text = "following"
                 } else {
                     edit_profile.text = "follow"
@@ -138,8 +165,10 @@ class ProfileFragment : Fragment() {
     }
 
     fun getFollowers() {
-        var reference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Follow").child(profileid).child("following")
-        reference.addValueEventListener(object:
+        var reference: DatabaseReference =
+            FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
+                .child("following")
+        reference.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
@@ -150,8 +179,10 @@ class ProfileFragment : Fragment() {
             }
         })
 
-        var reference1: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Follow").child(profileid).child("followers")
-        reference1.addValueEventListener(object:
+        var reference1: DatabaseReference =
+            FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
+                .child("followers")
+        reference1.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
@@ -165,25 +196,43 @@ class ProfileFragment : Fragment() {
 
     }
 
-    fun getNumPosts(){
+    fun getNumPosts() {
         var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
-        reference.addValueEventListener(object:
-            ValueEventListener {
+        reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 var i: Int = 0
-                for(snapshot in dataSnapshot.children){
+                for (snapshot in dataSnapshot.children) {
                     var post: Post = snapshot.getValue(Post::class.java)!!
-                    if(post.getPublisher() == profileid){
+                    if (post.getPublisher() == profileid) {
                         i++
                     }
                 }
                 posts.text = i.toString()
             }
+        })
+    }
 
+    fun myPhotos() {
+        var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (snapshot in dataSnapshot.children) {
+                    var post: Post = snapshot.getValue(Post::class.java)!!
+                    if (post.getPublisher() == profileid) {
+                        postList.add(post)
+                    }
+                }
+                postList.reverse()
+                myPhotoAdapter.notifyDataSetChanged()
+            }
         })
     }
 }

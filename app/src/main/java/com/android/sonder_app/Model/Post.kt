@@ -41,7 +41,7 @@ class Post {
     }
 
     fun getPublisher(): String {
-        return publisher
+        return this.publisher
     }
 
     fun setPublisher(publisher: String) {
