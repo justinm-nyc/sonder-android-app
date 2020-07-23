@@ -8,6 +8,9 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="email">Email</string>
+    <string name="back">back</string>
+    <string name="next">next</string>
+    <string name="finish">finish</string>
     <string name="dont_have_an_account_register">Don\'t have an account? Register</string>
 
 
