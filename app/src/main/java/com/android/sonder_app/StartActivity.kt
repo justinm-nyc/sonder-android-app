@@ -22,7 +22,7 @@ class StartActivity : AppCompatActivity() {
         //redirect if user is already logged in
         if(firebaseUser != null){
             Log.d(TAG, "Already signed in");
-            val intent = Intent(this@StartActivity, OnboardingActivity::class.java)
+            val intent = Intent(this@StartActivity, MainActivity::class.java)
             startActivity(intent)
         }
     }

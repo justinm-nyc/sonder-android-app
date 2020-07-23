@@ -2,6 +2,8 @@ package com.android.sonder_app
 
 import android.content.Intent
 import android.content.Intent.*
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -38,6 +40,7 @@ class SignUpActivity : AppCompatActivity() {
         password = findViewById(R.id.password)
         txt_signin = findViewById(R.id.txt_signin)
         signup = findViewById(R.id.signup)
+        progressBar = findViewById<ProgressBar>(R.id.progress_bar)
 
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
@@ -48,12 +51,7 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         signup.setOnClickListener {
-            progressBar = ProgressBar(
-                this@SignUpActivity,
-                null,
-                android.R.attr.progressBarStyleHorizontal
-            )
-            progressBar.isIndeterminate = true
+            
             progressBar.visibility = View.VISIBLE; // To show the ProgressBar
 
             val strUsername = username.text.toString()
@@ -91,7 +89,7 @@ class SignUpActivity : AppCompatActivity() {
                     reference.setValue(hashMap).addOnCompleteListener { task ->
                         if(task.isSuccessful) {
                             progressBar.visibility = View.GONE
-                            val intent = Intent(this, MainActivity::class.java)
+                            val intent = Intent(this, OnboardingActivity::class.java)
                             intent.addFlags(FLAG_ACTIVITY_CLEAR_TASK or FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
                         }

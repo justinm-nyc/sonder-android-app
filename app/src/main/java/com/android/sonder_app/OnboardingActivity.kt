@@ -1,6 +1,7 @@
 package com.android.sonder_app
 
 import Adapter.SliderAdapter
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Html
@@ -109,6 +110,11 @@ class OnboardingActivity : AppCompatActivity() {
 
                 mNextBtn.text = resources.getString(R.string.finish)
                 mBackBtn.text =  resources.getString(R.string.back)
+
+                mNextBtn.setOnClickListener{
+                    val intent = Intent(this@OnboardingActivity, MainActivity::class.java)
+                    startActivity(intent)
+                }
             } else {
                 mNextBtn.isEnabled = true
                 mBackBtn.isEnabled = true
