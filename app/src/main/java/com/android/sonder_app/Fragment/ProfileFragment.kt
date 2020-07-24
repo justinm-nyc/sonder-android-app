@@ -142,6 +142,8 @@ class ProfileFragment : Fragment() {
             Log.d(TAG, "savedPhotos clicked");
             recyclerView.visibility = View.GONE
             recyclerView_saves.visibility = View.VISIBLE
+
+            Log.d(TAG, "recyclerView visibility is " + recyclerView.visibility);
         }
         return view
     }
@@ -184,7 +186,7 @@ class ProfileFragment : Fragment() {
                 if (dataSnapshot.child(profileid).exists()) {
                     editProfile.text = "following"
                 } else {
-                    edit_profile.text = "follow"
+                    editProfile.text = "follow"
                 }
             }
 

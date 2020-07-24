@@ -1,11 +1,14 @@
 package Adapter
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.android.sonder_app.Fragment.PostDetailsFragment
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.R
 import com.bumptech.glide.Glide
@@ -22,7 +25,7 @@ class MyPhotoAdapter: RecyclerView.Adapter<MyPhotoAdapter.ViewHolder> {
 
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val post_image: ImageView = itemView.findViewById(R.id.post_image)
+        val postImage: ImageView = itemView.findViewById(R.id.post_image)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,8 +38,15 @@ class MyPhotoAdapter: RecyclerView.Adapter<MyPhotoAdapter.ViewHolder> {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var post: Post = mPosts.get(position)
-        Glide.with(mContext).load(post.getPostimage()).into(holder.post_image)
+        var post: Post = mPosts[position]
+        Glide.with(mContext).load(post.getPostimage()).into(holder.postImage)
+
+        holder.postImage.setOnClickListener {
+            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            editor.putString("postid", post.getPostid())
+            editor.apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PostDetailsFragment()).commit()
+        }
     }
 
 }

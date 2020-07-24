@@ -2,14 +2,18 @@ package Adapter
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.CommentsActivity
+import com.android.sonder_app.Fragment.PostDetailsFragment
+import com.android.sonder_app.Fragment.ProfileFragment
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
 import com.android.sonder_app.R
@@ -66,7 +70,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         holder.save.setOnClickListener {
-            Log.d(TAG, "save was clicked");
+            Log.d(TAG, "save was clicked")
             if(holder.save.tag == "save"){
                 FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid).child(post.getPostid()).setValue(true)
             } else {
@@ -79,6 +83,34 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             intent.putExtra("postid",post.getPostid())
             intent.putExtra("publisherid", post.getPublisher())
             mContext.startActivity(intent)
+        }
+
+        holder.imageProfile.setOnClickListener {
+            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            editor.putString("profileid", post.getPublisher())
+            editor.apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
+        }
+
+        holder.publisher.setOnClickListener {
+            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            editor.putString("profileid", post.getPublisher())
+            editor.apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
+        }
+
+        holder.postImage.setOnClickListener {
+            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            editor.putString("postid", post.getPostid())
+            editor.apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PostDetailsFragment()).commit()
+        }
+
+        holder.username.setOnClickListener {
+            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            editor.putString("profileid", post.getPublisher())
+            editor.apply()
+            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
         }
 
         holder.like.setOnClickListener {
