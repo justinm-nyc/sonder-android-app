@@ -2,10 +2,10 @@ package com.android.sonder_app.Fragment
 
 import Adapter.MyPhotoAdapter
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,22 +13,19 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.sonder_app.EditProfileActivity
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
-
 import com.android.sonder_app.R
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.post_item.*
-import kotlinx.android.synthetic.main.post_item.image_profile
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * A simple [Fragment] subclass.
@@ -118,7 +115,8 @@ class ProfileFragment : Fragment() {
         editProfile.setOnClickListener {
             var btn: String = editProfile.text.toString()
             if (btn == "Edit Profile") {
-                //go to edit profile
+                val intent = Intent(context, EditProfileActivity::class.java)
+                startActivity(intent)
             } else if (btn == "follow") {
                 FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
                     .child("following").child(profileid).setValue(true);
