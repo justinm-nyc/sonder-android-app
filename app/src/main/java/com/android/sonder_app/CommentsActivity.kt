@@ -64,7 +64,7 @@ class CommentsActivity : AppCompatActivity() {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
 
         val intent: Intent = intent
-        postid = intent.getStringExtra("postid")
+        postid  = intent.getStringExtra("postid")
         publisherid = intent.getStringExtra("publisherid")
 
         post.setOnClickListener {
@@ -79,6 +79,16 @@ class CommentsActivity : AppCompatActivity() {
         readComments()
     }
 
+    private fun addNotifications(){
+        var reference = FirebaseDatabase.getInstance().getReference("Notifications").child(publisherid)
+        val hashMap: HashMap<String, Any> = HashMap<String, Any>()
+        hashMap["userid"] = firebaseUser.uid
+        hashMap["text"] = "Commented: " + addcomment.text.toString()
+        hashMap["postid"] = postid
+        hashMap["ispost"] = true
+        reference.push().setValue(hashMap)
+    }
+
     private fun addcomment(){
         var reference = FirebaseDatabase.getInstance().getReference("Comments").child(postid)
         var hashMap: HashMap<String, String> = HashMap()
@@ -86,6 +96,7 @@ class CommentsActivity : AppCompatActivity() {
         hashMap["publisher"] = firebaseUser.uid
 
         reference.push().setValue(hashMap)
+        addNotifications()
         addcomment.setText("")
     }
 

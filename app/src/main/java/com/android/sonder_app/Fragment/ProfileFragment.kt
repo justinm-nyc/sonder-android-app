@@ -122,6 +122,9 @@ class ProfileFragment : Fragment() {
                     .child("following").child(profileid).setValue(true);
                 FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
                     .child("followers").child(firebaseUser.uid).setValue(true);
+
+            addNotifications()
+
             } else if (btn == "following") {
                 FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
                     .child("following").child(profileid).removeValue()
@@ -171,6 +174,16 @@ class ProfileFragment : Fragment() {
 
     }
 
+    private fun addNotifications(){
+        var reference = FirebaseDatabase.getInstance().getReference("Notifications").child(profileid)
+        val hashMap: HashMap<String, Any> = HashMap<String, Any>()
+        hashMap["userid"] = firebaseUser.uid
+        hashMap["text"] = "Started following you "
+        hashMap["postid"] = ""
+        hashMap["ispost"] = false
+        reference.push().setValue(hashMap)
+    }
+
     private fun checkFollow() {
         val reference: DatabaseReference =
             FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
@@ -198,7 +211,7 @@ class ProfileFragment : Fragment() {
         reference.addValueEventListener(object :
             ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
+
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {

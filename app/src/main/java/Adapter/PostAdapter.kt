@@ -117,6 +117,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             if (holder.like.tag == "like") {
                 FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid())
                     .child(firebaseUser.uid).setValue(true)
+            addNotifications(post.getPublisher(), post.getPostid())
             } else {
                 FirebaseDatabase.getInstance().reference.child("Likes").child(post.getPostid())
                     .child(firebaseUser.uid).removeValue()
@@ -164,10 +165,20 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     imageView.setTag("liked")
                 } else {
                     imageView.setImageResource(R.drawable.ic_like)
-                    imageView.setTag("like")
+                    imageView.tag = "like"
                 }
             }
         })
+    }
+
+    private fun addNotifications(userid: String, postid: String){
+        var reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid)
+        val hashMap: HashMap<String, Any> = HashMap<String, Any>()
+        hashMap["userid"] = firebaseUser.uid
+        hashMap["text"] = "liked your post"
+        hashMap["postid"] = postid
+        hashMap["ispost"] = true
+        reference.push().setValue(hashMap)
     }
 
     private fun numLikes(likes: TextView, postid: String) {
