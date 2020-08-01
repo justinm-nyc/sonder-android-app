@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Model.Post
@@ -23,15 +24,17 @@ class HomeFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var postAdapter: PostAdapter
     private lateinit var postLists: ArrayList<Post>
-
     private lateinit var followingList: ArrayList<String>
-
+    private lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         var view: View = inflater.inflate(R.layout.fragment_home, container, false)
+
+        progressBar = view.findViewById(R.id.progress_circular)
+
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
         var layoutManager: LinearLayoutManager = LinearLayoutManager(context)
@@ -84,6 +87,7 @@ class HomeFragment : Fragment() {
                 }
 
                 postAdapter.notifyDataSetChanged()
+                progressBar.visibility = View.GONE
             }
 
         })

@@ -18,6 +18,7 @@ import com.android.sonder_app.EditProfileActivity
 import com.android.sonder_app.FollowersActivity
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
+import com.android.sonder_app.OptionsActivity
 import com.android.sonder_app.R
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -125,6 +126,11 @@ class ProfileFragment : Fragment() {
             val intent: Intent = Intent(context, FollowersActivity::class.java)
             intent.putExtra("id",profileid)
             intent.putExtra("title","following")
+            startActivity(intent)
+        }
+
+        options.setOnClickListener {
+            val intent: Intent = Intent(context, OptionsActivity::class.java)
             startActivity(intent)
         }
 
