@@ -28,7 +28,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/sign_painter_house_script"
-                    android:text="@string/sign_in"
+                    android:text="@string/log_in"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="40sp"
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="@color/colorBlue"
-            android:text="@string/sign_in"
+            android:text="@string/log_in"
             android:textColor="@android:color/white" />
 
         <TextView

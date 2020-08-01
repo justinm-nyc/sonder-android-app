@@ -1,6 +1,7 @@
 package Adapter
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Fragment.ProfileFragment
+import com.android.sonder_app.MainActivity
 import com.android.sonder_app.Model.User
 import com.android.sonder_app.R
 import com.bumptech.glide.Glide
@@ -28,10 +30,12 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private var mContext: Context
     private var mUser: List<User>
     private lateinit var firebaseUser: FirebaseUser
+    private var isFragments: Boolean = false
 
-    constructor(mContext: Context, mUser: List<User>) : super() {
+    constructor(mContext: Context, mUser: List<User>, isFragments: Boolean) : super() {
         this.mContext = mContext
         this.mUser = mUser
+        this.isFragments = isFragments
     }
 
 
@@ -70,13 +74,19 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
 
         holder.itemView.setOnClickListener {
-            val editor: SharedPreferences.Editor =
-                mContext.getSharedPreferences("PREPS", Context.MODE_PRIVATE).edit()
-            editor.putString("profileid", user.getId())
-            editor.apply()
+            if(isFragments) {
+                val editor: SharedPreferences.Editor =
+                    mContext.getSharedPreferences("PREPS", Context.MODE_PRIVATE).edit()
+                editor.putString("profileid", user.getId())
+                editor.apply()
 
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, ProfileFragment()).commit()
+                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, ProfileFragment()).commit()
+            } else {
+                var intent: Intent = Intent(mContext, MainActivity::class.java)
+                intent.putExtra("publisherid",user.getId())
+                mContext.startActivity(intent)
+            }
         }
 
         holder.btn_follow?.setOnClickListener {

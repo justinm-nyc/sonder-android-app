@@ -9,15 +9,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.EditProfileActivity
+import com.android.sonder_app.FollowersActivity
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
 import com.android.sonder_app.R
@@ -37,7 +35,9 @@ class ProfileFragment : Fragment() {
     private lateinit var options: ImageView
     private lateinit var posts: TextView
     private lateinit var followers: TextView
+    private lateinit var followersButton: LinearLayout
     private lateinit var following: TextView
+    private lateinit var followingButton: LinearLayout
     private lateinit var fullname: TextView
     private lateinit var bio: TextView
     private lateinit var username: TextView
@@ -66,12 +66,14 @@ class ProfileFragment : Fragment() {
         val prefs: SharedPreferences = context!!.getSharedPreferences("PREPS", Context.MODE_PRIVATE)
         profileid = prefs.getString("profileid", "none")!!
 
-        Log.d(TAG, "profileid is $profileid");
+        Log.d(TAG, "profileid is $profileid")
         imageProfile = view.findViewById(R.id.image_profile)
         options = view.findViewById(R.id.options)
         posts = view.findViewById(R.id.posts)
         followers = view.findViewById(R.id.followers)
+        followersButton = view.findViewById(R.id.followersButton)
         following = view.findViewById(R.id.following)
+        followingButton = view.findViewById(R.id.followingButton)
         fullname = view.findViewById(R.id.fullname)
         bio = view.findViewById(R.id.bio)
         username = view.findViewById(R.id.username)
@@ -112,39 +114,57 @@ class ProfileFragment : Fragment() {
             savedPhotos.visibility = View.GONE
         }
 
+        followersButton.setOnClickListener(){
+            val intent: Intent = Intent(context, FollowersActivity::class.java)
+            intent.putExtra("id",profileid)
+            intent.putExtra("title","followers")
+            startActivity(intent)
+        }
+
+        followingButton.setOnClickListener(){
+            val intent: Intent = Intent(context, FollowersActivity::class.java)
+            intent.putExtra("id",profileid)
+            intent.putExtra("title","following")
+            startActivity(intent)
+        }
+
         editProfile.setOnClickListener {
-            var btn: String = editProfile.text.toString()
-            if (btn == "Edit Profile") {
-                val intent = Intent(context, EditProfileActivity::class.java)
-                startActivity(intent)
-            } else if (btn == "follow") {
-                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
-                    .child("following").child(profileid).setValue(true);
-                FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
-                    .child("followers").child(firebaseUser.uid).setValue(true);
+            val btn: String = editProfile.text.toString()
+            when (btn) {
+                "Edit Profile" -> {
+                    val intent = Intent(context, EditProfileActivity::class.java)
+                    startActivity(intent)
+                }
+                "follow" -> {
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
+                        .child("following").child(profileid).setValue(true)
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
+                        .child("followers").child(firebaseUser.uid).setValue(true)
 
-            addNotifications()
+                    addNotifications()
 
-            } else if (btn == "following") {
-                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
-                    .child("following").child(profileid).removeValue()
-                FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
-                    .child("followers").child(firebaseUser.uid).removeValue()
+                }
+                "following" -> {
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
+                        .child("following").child(profileid).removeValue()
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
+                        .child("followers").child(firebaseUser.uid).removeValue()
+                }
             }
         }
 
         myPhotos.setOnClickListener {
-            Log.d(TAG, "myPhotos clicked");
+            Log.d(TAG, "myPhotos clicked")
             recyclerView.visibility = View.VISIBLE
             recyclerView_saves.visibility = View.GONE
         }
 
         savedPhotos.setOnClickListener {
-            Log.d(TAG, "savedPhotos clicked");
+            Log.d(TAG, "savedPhotos clicked")
             recyclerView.visibility = View.GONE
             recyclerView_saves.visibility = View.VISIBLE
 
-            Log.d(TAG, "recyclerView visibility is " + recyclerView.visibility);
+            Log.d(TAG, "recyclerView visibility is " + recyclerView.visibility)
         }
         return view
     }
@@ -162,7 +182,7 @@ class ProfileFragment : Fragment() {
                 if (context == null) {
                     return
                 }
-                var user: User? = dataSnapshot.getValue(User::class.java)
+                val user: User? = dataSnapshot.getValue(User::class.java)
                 Glide.with(context!!).load(user?.getImageurl()).into(image_profile)
                 username.text = user?.getUsername()
                 fullname.text = user?.getFullname()
@@ -205,7 +225,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun getFollowers() {
-        var reference: DatabaseReference =
+        val reference: DatabaseReference =
             FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
                 .child("following")
         reference.addValueEventListener(object :
@@ -237,7 +257,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun getNumPosts() {
-        var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
@@ -257,7 +277,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun myPhotos() {
-        var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
@@ -277,7 +297,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun mysaves() {
-        Log.d(TAG, "mysaves() called");
+        Log.d(TAG, "mysaves() called")
         mySaves = ArrayList<String>()
         val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Saves").child(firebaseUser.uid)
         reference.addValueEventListener(object : ValueEventListener {
@@ -294,7 +314,7 @@ class ProfileFragment : Fragment() {
     }
 
     fun readSaves() {
-        Log.d(TAG, "readSaves() was clicked");
+        Log.d(TAG, "readSaves() was clicked")
         val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {

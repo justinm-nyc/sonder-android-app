@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.CommentsActivity
+import com.android.sonder_app.FollowersActivity
 import com.android.sonder_app.Fragment.PostDetailsFragment
 import com.android.sonder_app.Fragment.ProfileFragment
 import com.android.sonder_app.Model.Post
@@ -111,6 +112,13 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             editor.putString("profileid", post.getPublisher())
             editor.apply()
             (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
+        }
+
+        holder.likes.setOnClickListener{
+            val intent: Intent = Intent(mContext, FollowersActivity::class.java)
+            intent.putExtra("id", post.getPostid())
+            intent.putExtra("title","likes")
+            mContext.startActivity(intent)
         }
 
         holder.like.setOnClickListener {

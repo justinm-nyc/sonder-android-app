@@ -36,7 +36,7 @@ class SearchFragment : Fragment() {
         search_bar = view.findViewById(R.id.search_bar);
         mUsers = ArrayList<User>()
 
-        userAdapter = UserAdapter(context!!, mUsers);
+        userAdapter = UserAdapter(context!!, mUsers, true);
         recyclerView.adapter = userAdapter;
 
         readUsers()
