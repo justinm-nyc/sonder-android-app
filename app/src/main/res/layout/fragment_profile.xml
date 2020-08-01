@@ -35,7 +35,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/options"
-                    android:src="@drawable/ic_options"
+                    android:src="@drawable/ic_settings"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="10dp"
                     />
@@ -203,7 +203,6 @@
                     android:id="@+id/my_photos"
                     android:src="@drawable/ic_grid"
                     style="?android:attr/buttonBarButtonStyle">
-
                 </ImageButton>
 
                 <ImageButton
@@ -213,7 +212,16 @@
                     android:id="@+id/saved_photos"
                     android:src="@drawable/ic_save"
                     style="?android:attr/buttonBarButtonStyle">
+                </ImageButton>
 
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/notifications"
+                    android:src="@drawable/ic_like"
+                    style="?android:attr/buttonBarButtonStyle">
                 </ImageButton>
             </LinearLayout>
 
@@ -227,6 +235,12 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone"
                 android:id="@+id/recycler_view_saves"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/recycler_view_notifications"/>
 
         </LinearLayout>
     </ScrollView>

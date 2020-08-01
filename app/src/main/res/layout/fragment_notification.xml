@@ -12,11 +12,6 @@
         android:layout_height="wrap_content"
         android:background="?android:attr/windowBackground">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/main_toolbar_gradient">
 
         <RelativeLayout
             android:layout_height="wrap_content"
@@ -30,7 +25,6 @@
                 android:textColor="@color/colorPrimaryDark"/>
         </RelativeLayout>
 
-    </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView

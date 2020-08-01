@@ -2,23 +2,17 @@ package com.android.sonder_app.Fragment
 
 import Adapter.NotificationAdapter
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Model.Notification
-import com.android.sonder_app.Model.User
-
 import com.android.sonder_app.R
-import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
-import kotlinx.android.synthetic.main.post_item.*
-import java.util.*
-import kotlin.collections.ArrayList
 
 class NotificationFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
@@ -33,7 +27,7 @@ class NotificationFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_notification, container, false)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
-        val layoutManager: LinearLayoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
         notificationList = ArrayList<Notification>()
         notificationAdapter = NotificationAdapter(context!!, notificationList)

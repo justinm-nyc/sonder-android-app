@@ -1,6 +1,7 @@
 package com.android.sonder_app.Fragment
 
 import Adapter.MyPhotoAdapter
+import Adapter.NotificationAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.EditProfileActivity
 import com.android.sonder_app.FollowersActivity
+import com.android.sonder_app.Model.Notification
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
 import com.android.sonder_app.OptionsActivity
@@ -47,15 +49,20 @@ class ProfileFragment : Fragment() {
     private lateinit var profileid: String
     private lateinit var myPhotos: ImageButton
     private lateinit var savedPhotos: ImageButton
+    private lateinit var notifications: ImageButton
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var myPhotoAdapter: MyPhotoAdapter
     private lateinit var postList: ArrayList<Post>
 
     private lateinit var mySaves: ArrayList<String>
-    private lateinit var recyclerView_saves: RecyclerView
-    private lateinit var myPhotoAdapter_saves: MyPhotoAdapter
+    private lateinit var recyclerViewSaves: RecyclerView
+    private lateinit var myPhotoAdapterSaves: MyPhotoAdapter
     private lateinit var postListSaves: ArrayList<Post>
+
+    private lateinit var recyclerViewNotification: RecyclerView
+    private lateinit var notificationAdapter: NotificationAdapter
+    private lateinit var notificationList: ArrayList<Notification>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -80,49 +87,61 @@ class ProfileFragment : Fragment() {
         username = view.findViewById(R.id.username)
         myPhotos = view.findViewById(R.id.my_photos)
         savedPhotos = view.findViewById(R.id.saved_photos)
+        notifications = view.findViewById(R.id.notifications)
         editProfile = view.findViewById(R.id.edit_profile)
 
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
         val linearLayoutManager: LinearLayoutManager = GridLayoutManager(context, 3)
         recyclerView.layoutManager = linearLayoutManager
-        postList = ArrayList<Post>()
+        postList = ArrayList()
         myPhotoAdapter = MyPhotoAdapter(context!!, postList)
         recyclerView.adapter = myPhotoAdapter
 
 
-        recyclerView_saves = view.findViewById(R.id.recycler_view_saves)
-        recyclerView_saves.setHasFixedSize(true)
+        recyclerViewSaves = view.findViewById(R.id.recycler_view_saves)
+        recyclerViewSaves.setHasFixedSize(true)
         val linearLayoutManagerSaves: LinearLayoutManager = GridLayoutManager(context, 3)
-        recyclerView_saves.layoutManager = linearLayoutManagerSaves
+        recyclerViewSaves.layoutManager = linearLayoutManagerSaves
         postListSaves = ArrayList<Post>()
-        myPhotoAdapter_saves = MyPhotoAdapter(context!!, postListSaves)
-        recyclerView_saves.adapter = myPhotoAdapter_saves
+        myPhotoAdapterSaves = MyPhotoAdapter(context!!, postListSaves)
+        recyclerViewSaves.adapter = myPhotoAdapterSaves
 
         recyclerView.visibility = View.VISIBLE
-        recyclerView_saves.visibility = View.GONE
+        recyclerViewSaves.visibility = View.GONE
+
+
+        recyclerViewNotification = view.findViewById(R.id.recycler_view_notifications)
+        recyclerViewNotification.setHasFixedSize(true)
+        val layoutManagerNotification = LinearLayoutManager(context)
+        recyclerViewNotification.layoutManager = layoutManagerNotification
+        notificationList = ArrayList()
+        notificationAdapter = NotificationAdapter(context!!, notificationList)
+        recyclerViewNotification.adapter = notificationAdapter
 
         userInfo()
         getFollowers()
         getNumPosts()
         myPhotos()
         mysaves()
+        readNotification()
 
         if (profileid == firebaseUser.uid) {
             editProfile.text = "Edit Profile"
         } else {
             checkFollow()
             savedPhotos.visibility = View.GONE
+            notifications.visibility = View.GONE
         }
 
-        followersButton.setOnClickListener(){
+        followersButton.setOnClickListener {
             val intent: Intent = Intent(context, FollowersActivity::class.java)
             intent.putExtra("id",profileid)
             intent.putExtra("title","followers")
             startActivity(intent)
         }
 
-        followingButton.setOnClickListener(){
+        followingButton.setOnClickListener {
             val intent: Intent = Intent(context, FollowersActivity::class.java)
             intent.putExtra("id",profileid)
             intent.putExtra("title","following")
@@ -135,8 +154,7 @@ class ProfileFragment : Fragment() {
         }
 
         editProfile.setOnClickListener {
-            val btn: String = editProfile.text.toString()
-            when (btn) {
+            when (editProfile.text.toString()) {
                 "Edit Profile" -> {
                     val intent = Intent(context, EditProfileActivity::class.java)
                     startActivity(intent)
@@ -162,16 +180,26 @@ class ProfileFragment : Fragment() {
         myPhotos.setOnClickListener {
             Log.d(TAG, "myPhotos clicked")
             recyclerView.visibility = View.VISIBLE
-            recyclerView_saves.visibility = View.GONE
+            recyclerViewSaves.visibility = View.GONE
+            recyclerViewNotification.visibility = View.GONE
         }
 
         savedPhotos.setOnClickListener {
             Log.d(TAG, "savedPhotos clicked")
             recyclerView.visibility = View.GONE
-            recyclerView_saves.visibility = View.VISIBLE
+            recyclerViewSaves.visibility = View.VISIBLE
+            recyclerViewNotification.visibility = View.GONE
 
             Log.d(TAG, "recyclerView visibility is " + recyclerView.visibility)
         }
+
+        notifications.setOnClickListener {
+            Log.d(TAG, "notifications clicked")
+            recyclerView.visibility = View.GONE
+            recyclerViewSaves.visibility = View.GONE
+            recyclerViewNotification.visibility = View.VISIBLE
+        }
+
         return view
     }
 
@@ -201,8 +229,8 @@ class ProfileFragment : Fragment() {
     }
 
     private fun addNotifications(){
-        var reference = FirebaseDatabase.getInstance().getReference("Notifications").child(profileid)
-        val hashMap: HashMap<String, Any> = HashMap<String, Any>()
+        val reference = FirebaseDatabase.getInstance().getReference("Notifications").child(profileid)
+        val hashMap: HashMap<String, Any> = HashMap()
         hashMap["userid"] = firebaseUser.uid
         hashMap["text"] = "Started following you "
         hashMap["postid"] = ""
@@ -221,9 +249,9 @@ class ProfileFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.child(profileid).exists()) {
-                    editProfile.text = "following"
+                    editProfile.text = getString(R.string.following)
                 } else {
-                    editProfile.text = "follow"
+                    editProfile.text = getString(R.string.follow)
                 }
             }
 
@@ -270,9 +298,9 @@ class ProfileFragment : Fragment() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var i: Int = 0
+                var i = 0
                 for (snapshot in dataSnapshot.children) {
-                    var post: Post = snapshot.getValue(Post::class.java)!!
+                    val post: Post = snapshot.getValue(Post::class.java)!!
                     if (post.getPublisher() == profileid) {
                         i++
                     }
@@ -335,8 +363,33 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
-                myPhotoAdapter_saves.notifyDataSetChanged()
+                myPhotoAdapterSaves.notifyDataSetChanged()
             }
+        })
+    }
+
+    private fun readNotification() {
+        val firebaseUser: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
+        val reference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Notifications").child(firebaseUser.uid)
+        reference.addValueEventListener(object :
+            ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                notificationList.clear()
+                for (snapshot in dataSnapshot.children) {
+                    val notification: Notification = snapshot.getValue(Notification::class.java)!!
+                    notificationList.add(notification)
+                }
+
+                notificationList.reverse()
+                notificationAdapter.notifyDataSetChanged()
+
+            }
+
         })
     }
 

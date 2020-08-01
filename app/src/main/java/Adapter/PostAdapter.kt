@@ -45,7 +45,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        var post: Post = mPost[position]
+        val post: Post = mPost[position]
 
         Glide.with(mContext).load(post.getPostimage()).into(holder.postImage)
 
@@ -56,7 +56,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.description.text = post.getDescription()
         }
 
-        publisherInfo(holder.imageProfile, holder.username, holder.publisher, post.getPublisher())
+        publisherInfo(holder.imageProfile, holder.username, post.getPublisher())
 
         isLiked(post.getPostid(), holder.like)
         numLikes(holder.likes, post.getPostid())
@@ -87,28 +87,21 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         }
 
         holder.imageProfile.setOnClickListener {
-            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
-            editor.putString("profileid", post.getPublisher())
-            editor.apply()
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
-        }
-
-        holder.publisher.setOnClickListener {
-            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
             editor.putString("profileid", post.getPublisher())
             editor.apply()
             (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
         }
 
         holder.postImage.setOnClickListener {
-            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
             editor.putString("postid", post.getPostid())
             editor.apply()
             (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PostDetailsFragment()).commit()
         }
 
         holder.username.setOnClickListener {
-            var editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+            val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
             editor.putString("profileid", post.getPublisher())
             editor.apply()
             (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
@@ -144,24 +137,23 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         var likes: TextView = itemView.findViewById(R.id.likes)
         var comments: TextView = itemView.findViewById(R.id.comments)
         var description: TextView = itemView.findViewById(R.id.description)
-        var publisher: TextView = itemView.findViewById(R.id.publisher)
     }
 
     private fun getComments(postid: String, comments: TextView){
-        var reference = FirebaseDatabase.getInstance().reference.child("Comments").child(postid)
+        val reference = FirebaseDatabase.getInstance().reference.child("Comments").child(postid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                comments.text = "View All " + dataSnapshot.childrenCount + " Comments"
+                comments.text = dataSnapshot.childrenCount.toString()
             }
         })
     }
 
     private fun isLiked(postid: String, imageView: ImageView) {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        var reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
+        val reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 TODO("Not yet implemented")
@@ -180,7 +172,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     private fun addNotifications(userid: String, postid: String){
-        var reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid)
+        val reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid)
         val hashMap: HashMap<String, Any> = HashMap<String, Any>()
         hashMap["userid"] = firebaseUser.uid
         hashMap["text"] = "liked your post"
@@ -196,7 +188,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                likes.text = dataSnapshot.childrenCount.toString() + " likes"
+                likes.text = dataSnapshot.childrenCount.toString()
             }
         })
     }
@@ -204,7 +196,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
     private fun publisherInfo(
         image_profile: ImageView,
         username: TextView,
-        publisher: TextView,
         userid: String
     ) {
         var reference = FirebaseDatabase.getInstance().getReference("Users").child(userid)
@@ -216,14 +207,13 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 var user: User = dataSnapshot.getValue(User::class.java)!!
                 Glide.with(mContext).load(user.getImageurl()).into(image_profile)
                 username.text = user.getUsername()
-                publisher.text = user.getUsername()
             }
         })
     }
 
     fun isSaved(postId: String, imageView: ImageView){
-        var firebaseUser: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
-        var reference = FirebaseDatabase.getInstance().getReference().child("Saves").child(firebaseUser.getUid())
+        val firebaseUser: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
+        val reference = FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid)
 
         reference.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
@@ -232,7 +222,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if(dataSnapshot.child(postId).exists()){
-                    imageView.setImageResource(R.drawable.ic_save_black)
+                    imageView.setImageResource(R.drawable.ic_save_blue)
                     imageView.tag = "saved"
                 } else {
                     imageView.setImageResource(R.drawable.ic_save)

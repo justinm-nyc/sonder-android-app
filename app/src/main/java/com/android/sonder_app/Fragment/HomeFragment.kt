@@ -31,10 +31,9 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view: View = inflater.inflate(R.layout.fragment_home, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
         progressBar = view.findViewById(R.id.progress_circular)
-
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
         var layoutManager: LinearLayoutManager = LinearLayoutManager(context)
@@ -54,8 +53,7 @@ class HomeFragment : Fragment() {
         followingList = ArrayList<String>()
         var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Follow").child(FirebaseAuth.getInstance().currentUser!!.uid).child("following")
         reference.addValueEventListener(object: ValueEventListener{
-            override fun onCancelled(error: DatabaseError) {
-            }
+            override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 followingList.clear()
@@ -71,9 +69,7 @@ class HomeFragment : Fragment() {
     fun readPosts(){
         var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
         reference.addValueEventListener(object: ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
+            override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 postLists.clear()
@@ -83,6 +79,10 @@ class HomeFragment : Fragment() {
                         if(post.getPublisher() == id){
                             postLists.add(post)
                         }
+                    }
+
+                    if(post.getPublisher() == FirebaseAuth.getInstance().currentUser!!.uid){
+                        postLists.add(post)
                     }
                 }
 
