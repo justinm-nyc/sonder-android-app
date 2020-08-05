@@ -29,16 +29,15 @@ class PostDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var preferences: SharedPreferences =
+        val preferences: SharedPreferences =
             context!!.getSharedPreferences("PREPS", Context.MODE_PRIVATE)
         postid = preferences.getString("postid", "none")!!
 
         // Inflate the layout for this fragment
-        var view: View = inflater.inflate(R.layout.fragment_post_details, container, false)
+        val view: View = inflater.inflate(R.layout.fragment_post_details, container, false)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
-        var layoutManager: LinearLayoutManager = LinearLayoutManager(context)
-
+        val layoutManager: LinearLayoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
         postLists = ArrayList<Post>()
@@ -49,7 +48,7 @@ class PostDetailsFragment : Fragment() {
         return view
     }
 
-    fun readPost() {
+    private fun readPost() {
         var reference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("posts").child(postid)
         reference.addValueEventListener(object : ValueEventListener {

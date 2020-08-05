@@ -31,8 +31,6 @@
                     android:textColor="@color/colorPrimaryDark"
                     />
 
-
-
             </RelativeLayout>
 
         </androidx.appcompat.widget.Toolbar>
