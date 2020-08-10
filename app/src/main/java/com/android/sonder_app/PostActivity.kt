@@ -79,7 +79,7 @@ class PostActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     imageUrl = downloadUri.toString()
-                    var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+                    val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
                     var postid: String = reference.push().key!!
                     var hashMap: HashMap<String, String>  = HashMap<String, String>()
                     hashMap["postid"] = postid

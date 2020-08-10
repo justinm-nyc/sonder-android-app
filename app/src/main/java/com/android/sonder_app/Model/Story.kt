@@ -1,60 +1,60 @@
 package com.android.sonder_app.Model
 
 class Story {
-    private lateinit var imageUrl: String
-    private var timeStart: Long = 0
-    private var timeEnd: Long = 0
-    private lateinit var storyId: String
-    private lateinit var userId: String
+    private lateinit var imageurl: String
+    private var timestart: Long = 0
+    private var timeend: Long = 0
+    private lateinit var storyid: String
+    private lateinit var userid: String
 
-    constructor(imageUrl: String, timeStart: Long, timeEnd: Long, storyId: String, userId: String) {
-        this.imageUrl = imageUrl
-        this.timeStart = timeStart
-        this.timeEnd = timeEnd
-        this.storyId = storyId
-        this.userId = userId
+    constructor(imageurl: String, timestart: Long, timeend: Long, storyid: String, userid: String) {
+        this.imageurl = imageurl
+        this.timestart = timestart
+        this.timeend = timeend
+        this.storyid = storyid
+        this.userid = userid
     }
 
-    constructor()
+    constructor(){}
 
     fun getImageUrl(): String {
-        return imageUrl
+        return imageurl
     }
 
-    fun setImageUrl(imageUrl: String) {
-        this.imageUrl = imageUrl
+    fun setImageUrl(imageurl: String) {
+        this.imageurl = imageurl
     }
 
     fun getTimeStart(): Long {
-        return timeStart
+        return timestart
     }
 
     fun setTimeStart(timeStart: Long) {
-        this.timeStart = timeStart
+        this.timestart = timeStart
     }
 
     fun getTimeEnd(): Long {
-        return timeEnd
+        return timeend
     }
 
-    fun setTimeEnd(timeEnd: Long) {
-        this.timeEnd = timeEnd
+    fun setTimeEnd(timeend: Long) {
+        this.timeend = timeend
     }
 
     fun getStoryId(): String {
-        return storyId
+        return storyid
     }
 
-    fun setStoryId(storyId: String) {
-        this.storyId = storyId
+    fun setStoryId(storyid: String) {
+        this.storyid = storyid
     }
 
     fun getUserId(): String {
-        return userId
+        return userid
     }
 
-    fun setUserId(userId: String) {
-        this.userId = userId
+    fun setUserId(userid: String) {
+        this.userid = userid
     }
 
 

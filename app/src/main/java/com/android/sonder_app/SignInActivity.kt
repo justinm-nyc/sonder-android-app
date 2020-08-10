@@ -31,6 +31,7 @@ class SignInActivity : AppCompatActivity() {
         password = findViewById(R.id.password)
         txt_signup = findViewById(R.id.txt_signup)
         signin = findViewById(R.id.signin)
+        progressBar = findViewById(R.id.progress_bar)
 
         auth = FirebaseAuth.getInstance()
 
@@ -40,11 +41,6 @@ class SignInActivity : AppCompatActivity() {
         }
 
         signin.setOnClickListener {
-            progressBar = ProgressBar(
-                this@SignInActivity,
-                null,
-                android.R.attr.progressBarStyleHorizontal
-            )
             progressBar.isIndeterminate = true
             progressBar.visibility = View.VISIBLE; // To show the ProgressBar
 

@@ -11,7 +11,7 @@
         android:layout_height="50dp"
         app:civ_border_width="2dp"
         android:layout_gravity="center"
-        app:civ_border_color="@color/colorBlue"
+        app:civ_border_color="@color/headerPurple"
         android:src="@drawable/ic_profile"
         android:layout_marginTop="5dp"
         android:id="@+id/story_photo">
@@ -34,7 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:id="@+id/story_username"
+        android:layout_marginBottom="5dp"
         android:text="username"
+        android:textSize="11sp"
         android:textColor="@color/colorPrimaryDark"
         android:maxLines="1" />
 

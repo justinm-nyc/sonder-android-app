@@ -8,7 +8,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Model.User
-import com.bumptech.glide.Glide
 import com.google.firebase.database.*
 
 class FollowersActivity : AppCompatActivity() {
@@ -39,7 +38,7 @@ class FollowersActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        userList = ArrayList<User>()
+        userList = ArrayList()
         userAdapter = UserAdapter(this, userList, false)
         recyclerView.adapter = userAdapter
 

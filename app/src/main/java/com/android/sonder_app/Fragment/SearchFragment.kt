@@ -92,7 +92,7 @@ class SearchFragment : Fragment() {
                     mUsers.clear()
 
                     for(snapshot in dataSnapshot.children){
-                        var user: User = snapshot.getValue(User::class.java)!!
+                        val user: User = snapshot.getValue(User::class.java)!!
                         mUsers.add(user)
                     }
                     userAdapter.notifyDataSetChanged()

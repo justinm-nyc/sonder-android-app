@@ -57,7 +57,7 @@ class PostDetailsFragment : Fragment() {
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 postLists.clear()
-                var post: Post = dataSnapshot.getValue(Post::class.java)!!
+                val post: Post = dataSnapshot.getValue(Post::class.java)!!
                 postLists.add(post)
                 postAdapter.notifyDataSetChanged()
 

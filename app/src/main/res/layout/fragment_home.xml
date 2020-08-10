@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/recycler_view_story"
-                android:layout_margin="5dp"
+                android:background="@drawable/stories_bar_gradient"
                 />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"

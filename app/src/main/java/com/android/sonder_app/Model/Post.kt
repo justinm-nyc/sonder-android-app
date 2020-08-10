@@ -11,7 +11,6 @@ class Post {
         this.postimage = postimage
         this.description = description
         this.publisher = publisher
-
     }
 
     constructor(){}
