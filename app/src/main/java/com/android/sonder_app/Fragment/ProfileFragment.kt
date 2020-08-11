@@ -1,7 +1,8 @@
 package com.android.sonder_app.Fragment
 
-import Adapter.MyPhotoAdapter
+import Adapter.PhotoGridAdapter
 import Adapter.NotificationAdapter
+import Adapter.PostAdapter
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -48,16 +49,20 @@ class ProfileFragment : Fragment() {
     private lateinit var firebaseUser: FirebaseUser
     private lateinit var profileid: String
     private lateinit var myPhotos: ImageButton
+    private lateinit var myPhotosVertical: ImageButton
     private lateinit var savedPhotos: ImageButton
     private lateinit var notifications: ImageButton
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var myPhotoAdapter: MyPhotoAdapter
+    private lateinit var recyclerViewGridPosts: RecyclerView
+    private lateinit var photoGridAdapter: PhotoGridAdapter
     private lateinit var postList: ArrayList<Post>
+
+    private lateinit var recyclerViewVerticalPosts: RecyclerView
+    private lateinit var postAdapter: PostAdapter
 
     private lateinit var mySaves: ArrayList<String>
     private lateinit var recyclerViewSaves: RecyclerView
-    private lateinit var myPhotoAdapterSaves: MyPhotoAdapter
+    private lateinit var photoGridAdapterSaves: PhotoGridAdapter
     private lateinit var postListSaves: ArrayList<Post>
 
     private lateinit var recyclerViewNotification: RecyclerView
@@ -86,29 +91,26 @@ class ProfileFragment : Fragment() {
         bio = view.findViewById(R.id.bio)
         username = view.findViewById(R.id.username)
         myPhotos = view.findViewById(R.id.my_photos)
+        myPhotosVertical = view.findViewById(R.id.my_photos_vertical)
         savedPhotos = view.findViewById(R.id.saved_photos)
         notifications = view.findViewById(R.id.notifications)
         editProfile = view.findViewById(R.id.edit_profile)
 
-        recyclerView = view.findViewById(R.id.recycler_view)
-        recyclerView.setHasFixedSize(true)
-        val linearLayoutManager: LinearLayoutManager = GridLayoutManager(context, 3)
-        recyclerView.layoutManager = linearLayoutManager
+        recyclerViewGridPosts = view.findViewById(R.id.recycler_view_grid)
+        recyclerViewGridPosts.setHasFixedSize(true)
+        val linearLayoutManager: LinearLayoutManager = GridLayoutManager(context, 2)
+        recyclerViewGridPosts.layoutManager = linearLayoutManager
         postList = ArrayList()
-        myPhotoAdapter = MyPhotoAdapter(context!!, postList)
-        recyclerView.adapter = myPhotoAdapter
+        photoGridAdapter = PhotoGridAdapter(context!!, postList)
+        recyclerViewGridPosts.adapter = photoGridAdapter
 
 
-        recyclerViewSaves = view.findViewById(R.id.recycler_view_saves)
-        recyclerViewSaves.setHasFixedSize(true)
-        val linearLayoutManagerSaves: LinearLayoutManager = GridLayoutManager(context, 3)
-        recyclerViewSaves.layoutManager = linearLayoutManagerSaves
-        postListSaves = ArrayList<Post>()
-        myPhotoAdapterSaves = MyPhotoAdapter(context!!, postListSaves)
-        recyclerViewSaves.adapter = myPhotoAdapterSaves
-
-        recyclerView.visibility = View.VISIBLE
-        recyclerViewSaves.visibility = View.GONE
+        recyclerViewVerticalPosts = view.findViewById(R.id.recycler_view_vertical)
+        recyclerViewVerticalPosts.setHasFixedSize(true)
+        val layoutManagerVerticalPosts = LinearLayoutManager(context)
+        recyclerViewVerticalPosts.layoutManager = layoutManagerVerticalPosts
+        postAdapter = PostAdapter(context!!, postList)
+        recyclerViewVerticalPosts.adapter = postAdapter
 
 
         recyclerViewNotification = view.findViewById(R.id.recycler_view_notifications)
@@ -118,6 +120,19 @@ class ProfileFragment : Fragment() {
         notificationList = ArrayList()
         notificationAdapter = NotificationAdapter(context!!, notificationList)
         recyclerViewNotification.adapter = notificationAdapter
+
+
+        recyclerViewSaves = view.findViewById(R.id.recycler_view_saves)
+        recyclerViewSaves.setHasFixedSize(true)
+        val linearLayoutManagerSaves: LinearLayoutManager = GridLayoutManager(context, 2)
+        recyclerViewSaves.layoutManager = linearLayoutManagerSaves
+        postListSaves = ArrayList<Post>()
+        photoGridAdapterSaves = PhotoGridAdapter(context!!, postListSaves)
+        recyclerViewSaves.adapter = photoGridAdapterSaves
+
+        recyclerViewGridPosts.visibility = View.VISIBLE
+        recyclerViewSaves.visibility = View.GONE
+
 
         userInfo()
         getFollowers()
@@ -179,23 +194,34 @@ class ProfileFragment : Fragment() {
 
         myPhotos.setOnClickListener {
             Log.d(TAG, "myPhotos clicked")
-            recyclerView.visibility = View.VISIBLE
+            recyclerViewGridPosts.visibility = View.VISIBLE
+            recyclerViewVerticalPosts.visibility = View.GONE
+            recyclerViewSaves.visibility = View.GONE
+            recyclerViewNotification.visibility = View.GONE
+        }
+
+        myPhotosVertical.setOnClickListener {
+            Log.d(TAG, "myPhotos clicked")
+            recyclerViewGridPosts.visibility = View.GONE
+            recyclerViewVerticalPosts.visibility = View.VISIBLE
             recyclerViewSaves.visibility = View.GONE
             recyclerViewNotification.visibility = View.GONE
         }
 
         savedPhotos.setOnClickListener {
             Log.d(TAG, "savedPhotos clicked")
-            recyclerView.visibility = View.GONE
+            recyclerViewGridPosts.visibility = View.GONE
+            recyclerViewVerticalPosts.visibility = View.GONE
             recyclerViewSaves.visibility = View.VISIBLE
             recyclerViewNotification.visibility = View.GONE
 
-            Log.d(TAG, "recyclerView visibility is " + recyclerView.visibility)
+            Log.d(TAG, "recyclerView visibility is " + recyclerViewGridPosts.visibility)
         }
 
         notifications.setOnClickListener {
             Log.d(TAG, "notifications clicked")
-            recyclerView.visibility = View.GONE
+            recyclerViewGridPosts.visibility = View.GONE
+            recyclerViewVerticalPosts.visibility = View.GONE
             recyclerViewSaves.visibility = View.GONE
             recyclerViewNotification.visibility = View.VISIBLE
         }
@@ -325,7 +351,8 @@ class ProfileFragment : Fragment() {
                     }
                 }
                 postList.reverse()
-                myPhotoAdapter.notifyDataSetChanged()
+                photoGridAdapter.notifyDataSetChanged()
+                postAdapter.notifyDataSetChanged()
             }
         })
     }
@@ -363,7 +390,7 @@ class ProfileFragment : Fragment() {
                         }
                     }
                 }
-                myPhotoAdapterSaves.notifyDataSetChanged()
+                photoGridAdapterSaves.notifyDataSetChanged()
             }
         })
     }

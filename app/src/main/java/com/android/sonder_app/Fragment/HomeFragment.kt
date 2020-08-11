@@ -64,7 +64,7 @@ class HomeFragment : Fragment() {
         storyAdapter = StoryAdapter(context!!, storyList)
         recyclerViewStory.adapter = storyAdapter
 
-        postLists = ArrayList<Post>()
+        postLists = ArrayList()
         postAdapter = PostAdapter(context!!,postLists)
         recyclerView.adapter = postAdapter
 

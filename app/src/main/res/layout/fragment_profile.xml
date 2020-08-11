@@ -189,12 +189,10 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
                 android:layout_marginTop="10dp"
                 android:id="@+id/last_bar"
                 android:orientation="horizontal"
-                android:background="@drawable/button_black">
+                android:background="#eee">
 
                 <ImageButton
                     android:layout_width="0dp"
@@ -209,8 +207,8 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:id="@+id/saved_photos"
-                    android:src="@drawable/ic_save"
+                    android:id="@+id/my_photos_vertical"
+                    android:src="@drawable/ic_settings"
                     style="?android:attr/buttonBarButtonStyle">
                 </ImageButton>
 
@@ -223,12 +221,28 @@
                     android:src="@drawable/ic_like"
                     style="?android:attr/buttonBarButtonStyle">
                 </ImageButton>
+
+                <ImageButton
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:id="@+id/saved_photos"
+                    android:src="@drawable/ic_save"
+                    style="?android:attr/buttonBarButtonStyle">
+                </ImageButton>
+
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/recycler_view"/>
+                android:id="@+id/recycler_view_grid"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/recycler_view_vertical"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
