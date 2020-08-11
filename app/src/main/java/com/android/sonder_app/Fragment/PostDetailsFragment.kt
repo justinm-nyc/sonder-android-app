@@ -37,10 +37,10 @@ class PostDetailsFragment : Fragment() {
         val view: View = inflater.inflate(R.layout.fragment_post_details, container, false)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
-        val layoutManager: LinearLayoutManager = LinearLayoutManager(context)
+        val layoutManager = LinearLayoutManager(context)
         recyclerView.layoutManager = layoutManager
 
-        postLists = ArrayList<Post>()
+        postLists = ArrayList()
         postAdapter = PostAdapter(context!!, postLists)
         recyclerView.adapter = postAdapter
 
@@ -49,7 +49,7 @@ class PostDetailsFragment : Fragment() {
     }
 
     private fun readPost() {
-        var reference: DatabaseReference =
+        val reference: DatabaseReference =
             FirebaseDatabase.getInstance().getReference("posts").child(postid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {

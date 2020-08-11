@@ -5,6 +5,7 @@
     <color name="colorWhite">#FFFF</color>
     <color name="colorAccent">#c2bdbf</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorPostTopGray">#E0E0E0</color>
     <color name="colorGray">#D4D1D6</color>
     <color name="colorLightPurple">#C2B2CF</color>
     <color name="colorPurple">#BD33E0</color>

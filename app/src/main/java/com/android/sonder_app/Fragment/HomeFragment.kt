@@ -2,12 +2,21 @@ package com.android.sonder_app.Fragment
 
 import Adapter.PostAdapter
 import Adapter.StoryAdapter
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.LayerDrawable
+import android.graphics.drawable.ShapeDrawable
+import android.graphics.drawable.shapes.RoundRectShape
+import android.os.Build
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.annotation.ColorRes
+import androidx.annotation.DimenRes
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Model.Post
@@ -82,7 +91,7 @@ class HomeFragment : Fragment() {
     }
 
     fun readPosts(){
-        var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
         reference.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 
@@ -109,7 +118,7 @@ class HomeFragment : Fragment() {
     }
 
     fun readStory() {
-        var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Story")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Story")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val currentTime: Long = System.currentTimeMillis()
