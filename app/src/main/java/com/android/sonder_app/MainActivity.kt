@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
                 selectFragment = SearchFragment();
             R.id.nav_add ->
                 startActivity(Intent(this@MainActivity, PostActivity::class.java))
-            R.id.nav_heart ->
+            R.id.nav_itinerary ->
                 selectFragment = NotificationFragment();
             R.id.nav_profile -> {
                 val sharedPreference = getSharedPreferences("PREPS", MODE_PRIVATE)

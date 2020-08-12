@@ -97,12 +97,12 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
         }
 
-        holder.postImage.setOnClickListener {
-            val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
-            editor.putString("postid", post.getPostid())
-            editor.apply()
-            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PostDetailsFragment()).commit()
-        }
+//        holder.postImage.setOnClickListener {
+//            val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
+//            editor.putString("postid", post.getPostid())
+//            editor.apply()
+//            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PostDetailsFragment()).commit()
+//        }
 
         holder.username.setOnClickListener {
             val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()

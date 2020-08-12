@@ -16,10 +16,9 @@
         android:title="add"
         />
     <item
-        android:id="@+id/nav_heart"
-        android:icon="@drawable/ic_heart"
-        android:title="heart"
-        />
+        android:id="@+id/nav_itinerary"
+        android:icon="@drawable/ic_itinerary"
+        android:title="itinerary" />
     <item
         android:id="@+id/nav_profile"
         android:icon="@drawable/ic_profile"
