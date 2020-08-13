@@ -17,6 +17,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import jp.shts.android.storiesprogressview.StoriesProgressView
+import kotlinx.android.synthetic.main.activity_story.*
 
 class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
     private val TAG = "MyMessage:"
@@ -39,7 +40,7 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
     private lateinit var userId: String
 
 
-    private var onTouchListener = View.OnTouchListener { view: View, motionEvent: MotionEvent ->
+    private var onTouchListener = View.OnTouchListener {view: View, motionEvent: MotionEvent ->
         when(motionEvent.action){
             MotionEvent.ACTION_DOWN -> {
                 pressTime = System.currentTimeMillis()
@@ -54,6 +55,7 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
         }
         return@OnTouchListener false
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_story)
@@ -68,8 +70,8 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
         story_photo = findViewById(R.id.story_photo)
         story_username = findViewById(R.id.story_username)
 
-        r_seen.setVisibility(View.GONE)
-        story_delete.setVisibility(View.GONE)
+        r_seen.visibility = View.GONE
+        story_delete.visibility = View.GONE
 
         userId = intent.getStringExtra("userid")!!
         if(userId == FirebaseAuth.getInstance().currentUser!!.uid){
@@ -87,7 +89,7 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
         reverse.setOnTouchListener(onTouchListener)
 
         val skip: View = findViewById(R.id.skip)
-        reverse.setOnClickListener {
+        skip.setOnClickListener {
             storiesProgressView.skip()
         }
         skip.setOnTouchListener(onTouchListener)
@@ -138,6 +140,8 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
                 storiesProgressView.startStories(counter)
                 Glide.with(applicationContext).load(images[counter]).into(image)
 
+                Log.d(TAG, "counter is $counter")
+
                 addView(storyIds[counter])
                 seenNumber(storyIds[counter])
 
@@ -148,7 +152,7 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
 
     }
 
-    fun userInfo(userId: String){
+    private fun userInfo(userId: String){
         val reference = FirebaseDatabase.getInstance().getReference("Users").child(userId)
         reference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -180,39 +184,42 @@ class StoryActivity : AppCompatActivity(), StoriesProgressView.StoriesListener {
     }
 
     override fun onComplete() {
+        Log.d(TAG, "onComplete called")
         finish()
     }
 
     override fun onNext() {
+        Log.d(TAG, "onNext called")
         Glide.with(applicationContext).load(images[++counter]).into(image)
         addView(storyIds[counter])
         seenNumber(storyIds[counter])
     }
 
     override fun onPrev() {
+        Log.d(TAG, "onPrev called")
         if ((counter - 1) < 0 ){
-            //LOG HERE
-            Log.d(TAG, "onPre called")
             return
         }
         Glide.with(applicationContext).load(images[--counter]).into(image)
-        seenNumber(storyIds.get(counter))
+        seenNumber(storyIds[counter])
     }
 
     override fun onDestroy() {
+        Log.d(TAG, "onDestroy called")
         storiesProgressView.destroy()
         super.onDestroy()
     }
 
     override fun onPause() {
+        Log.d(TAG, "onPause called")
         storiesProgressView.pause()
         super.onPause()
     }
 
     override fun onResume() {
+        Log.d(TAG, "onResume called")
         storiesProgressView.resume()
         super.onResume()
     }
-
 
 }
