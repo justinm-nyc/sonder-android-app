@@ -65,7 +65,6 @@ class SearchFragment : Fragment() {
 
         query.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -84,7 +83,6 @@ class SearchFragment : Fragment() {
         var reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users")
         reference.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {

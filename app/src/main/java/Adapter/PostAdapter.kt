@@ -160,7 +160,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         val reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -221,7 +220,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         reference.addValueEventListener(object: ValueEventListener{
             override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
