@@ -26,10 +26,12 @@ class PostActivity : AppCompatActivity() {
     private lateinit var uploadTask: StorageTask<UploadTask.TaskSnapshot>
     private lateinit var storageReference: StorageReference
     private lateinit var description: EditText
+    private lateinit var ratingBar: RatingBar
     private lateinit var imageAdded: ImageView
     private lateinit var close: ImageView
     private lateinit var post: TextView
     private lateinit var progressBar: ProgressBar
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,9 +39,10 @@ class PostActivity : AppCompatActivity() {
 
         close = findViewById(R.id.close)
         description = findViewById(R.id.description)
+        ratingBar = findViewById(R.id.ratingBar)
         imageAdded = findViewById(R.id.image_added)
         post = findViewById(R.id.post)
-        progressBar = findViewById<ProgressBar>(R.id.progress_bar)
+        progressBar = findViewById(R.id.progress_bar)
 
         storageReference = FirebaseStorage.getInstance().getReference("posts")
         close.setOnClickListener{
@@ -56,8 +59,8 @@ class PostActivity : AppCompatActivity() {
     }
 
     private fun getFileExtension(uri: Uri): String? {
-        var contentResolver: ContentResolver = contentResolver
-        var mime: MimeTypeMap  = MimeTypeMap.getSingleton();
+        val contentResolver: ContentResolver = contentResolver
+        val mime: MimeTypeMap  = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(contentResolver.getType(uri))
     }
 
@@ -65,7 +68,7 @@ class PostActivity : AppCompatActivity() {
         progressBar.visibility = View.VISIBLE; // To show the ProgressBar
 
         if(imageUri != null){
-            var referenceFile: StorageReference = storageReference.child(System.currentTimeMillis().toString() + "." + getFileExtension(imageUri))
+            val referenceFile: StorageReference = storageReference.child(System.currentTimeMillis().toString() + "." + getFileExtension(imageUri))
             uploadTask = referenceFile.putFile(imageUri)
 
             uploadTask.continueWithTask{ task ->
@@ -80,12 +83,14 @@ class PostActivity : AppCompatActivity() {
                     val downloadUri = task.result
                     imageUrl = downloadUri.toString()
                     val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
-                    var postid: String = reference.push().key!!
-                    var hashMap: HashMap<String, String>  = HashMap<String, String>()
+                    val postid: String = reference.push().key!!
+                    val hashMap: HashMap<String, Any>  = HashMap()
                     hashMap["postid"] = postid
                     hashMap["postimage"] = imageUrl
+//                    hashMap["rating"] = ratingBar.numStars
                     hashMap["description"] = description.text.toString()
                     hashMap["publisher"] = FirebaseAuth.getInstance().currentUser?.uid!!
+
 
                     reference.child(postid).setValue(hashMap)
                     progressBar.visibility = View.GONE
@@ -110,7 +115,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK){
-            var result: CropImage.ActivityResult = CropImage.getActivityResult(data);
+            val result: CropImage.ActivityResult = CropImage.getActivityResult(data);
 
             imageUri = result.uri;
             image_added.setImageURI(imageUri)
@@ -121,6 +126,5 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             finish()
         }
     }
-
 
 }

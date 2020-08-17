@@ -21,6 +21,10 @@
     <string name="log_out">Log Out</string>
     <string name="following">Following</string>
     <string name="follow">Follow</string>
+    <string name="add_a_link">Add a link like http://</string>
+    <string name="tag_people">Tag People</string>
+    <string name="select_category">Select Category</string>
+    <string name="select_sub_category">Select Sub Category</string>
 
 
 </resources>
