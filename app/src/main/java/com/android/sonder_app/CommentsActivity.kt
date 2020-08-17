@@ -40,14 +40,14 @@ class CommentsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_comments)
 
-        var toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.title = "Comments"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         recyclerView = findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
-        var linearLayoutManger:  LinearLayoutManager = LinearLayoutManager(this)
+        val linearLayoutManger:  LinearLayoutManager = LinearLayoutManager(this)
         recyclerView.layoutManager = linearLayoutManger
 
         commentList = ArrayList<Comment>()

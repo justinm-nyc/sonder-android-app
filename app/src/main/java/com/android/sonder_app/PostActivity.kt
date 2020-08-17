@@ -44,6 +44,11 @@ class PostActivity : AppCompatActivity() {
         post = findViewById(R.id.post)
         progressBar = findViewById(R.id.progress_bar)
 
+        //TODO: SET THE UP BUTTON SO THAT WHEN IT IS CLICKED, THE EDIT PHOTO ACTIVITY IS WHAT IS SHOWN
+//        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
+//        setSupportActionBar(toolbar)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         storageReference = FirebaseStorage.getInstance().getReference("posts")
         close.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,31 +17,40 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?android:attr/windowBackground">
+            android:background="@color/headerPurple"
+            app:contentInsetStart="0dp">
 
-            <RelativeLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/relativeLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingEnd="20dp"
+                android:paddingStart="10dp">
 
                 <ImageView
                     android:id="@+id/close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:src="@drawable/ic_close" />
+                    android:src="@drawable/ic_close"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:id="@+id/post"
+                    android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp"
-                    android:text="POST"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
+                    android:fontFamily="@font/sign_painter_house_script"
+                    android:text="@string/app_name"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/white"
+                    android:textSize="40sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/close"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            </RelativeLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -49,41 +59,43 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:indeterminate="true"/>
+            android:indeterminate="true"
+            android:visibility="gone" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:paddingBottom="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
+                android:id="@+id/image_added"
                 android:layout_width="0dp"
-                android:layout_weight="1"
                 android:layout_height="200dp"
-                android:layout_gravity="center"
-                android:src="@mipmap/ic_launcher"
+                android:layout_gravity="top"
                 android:layout_margin="10dp"
-                android:id="@+id/image_added"/>
+                android:layout_weight="1"
+                android:src="@mipmap/ic_launcher" />
 
             <RelativeLayout
-                android:layout_height="match_parent"
                 android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1">
 
                 <Button
-                    android:id="@+id/done"
+                    android:id="@+id/post"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="15dp"
                     android:layout_alignParentEnd="true"
+                    android:layout_margin="15dp"
                     android:background="@color/colorBlue"
                     android:text="Done"
                     android:textColor="@android:color/white" />
@@ -92,7 +104,7 @@
                     android:id="@+id/ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/done"
+                    android:layout_below="@id/post"
                     android:layout_alignParentEnd="true"
                     android:max="5"
                     android:progressTint="@color/colorRatingYellow"
@@ -103,74 +115,78 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tag_people"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edittext_background"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
+            android:padding="5dp"
             android:text="@string/tag_people"
-            android:padding="5dp"
-            android:id="@+id/tag_people"/>
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite" />
 
         <EditText
+            android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/edittext_background"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
-            android:hint=" Location"
-            android:padding="5dp"
             android:layout_marginTop="15dp"
-            android:id="@+id/location"/>
+            android:background="@drawable/edittext_background"
+            android:hint="@string/location"
+            android:padding="5dp"
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="14sp" />
 
         <EditText
+            android:id="@+id/add_link"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:autofillHints="Add a link"
             android:background="@drawable/edittext_background"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
             android:hint="@string/add_a_link"
             android:inputType="textUri"
             android:padding="5dp"
-            android:layout_marginTop="15dp"
-            android:id="@+id/add_link"
-            android:autofillHints="Add a link" />
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="14sp" />
 
 
         <TextView
+            android:id="@+id/select_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:autofillHints="Add a link"
             android:background="@drawable/edittext_background"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
             android:padding="5dp"
             android:text="@string/select_category"
-            android:layout_marginTop="15dp"
-            android:id="@+id/select_category"
-            android:autofillHints="Add a link" />
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite" />
 
         <TextView
+            android:id="@+id/select_sub_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:autofillHints="Add a link"
             android:background="@drawable/edittext_background"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
             android:hint="@string/select_sub_category"
             android:padding="5dp"
-            android:layout_marginTop="15dp"
-            android:id="@+id/select_sub_category"
-            android:autofillHints="Add a link" />
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite" />
 
         <EditText
+            android:id="@+id/description"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/edittext_background"
-            android:textColorHint="@color/colorWhite"
-            android:textColor="@color/colorWhite"
+            android:gravity="top"
             android:hint="Caption..."
             android:padding="5dp"
-            android:layout_marginTop="20dp"
-            android:id="@+id/description"/>
+            android:textColor="@color/colorWhite"
+            android:textColorHint="@color/colorWhite"
+            android:textSize="14sp" />
 
     </LinearLayout>
 </LinearLayout>
