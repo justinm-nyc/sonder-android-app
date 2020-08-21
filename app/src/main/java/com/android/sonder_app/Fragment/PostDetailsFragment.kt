@@ -50,7 +50,7 @@ class PostDetailsFragment : Fragment() {
 
     private fun readPost() {
         val reference: DatabaseReference =
-            FirebaseDatabase.getInstance().getReference("posts").child(postid)
+            FirebaseDatabase.getInstance().getReference("Posts").child(postid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }

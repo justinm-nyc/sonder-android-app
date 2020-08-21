@@ -42,7 +42,7 @@ class FollowersActivity : AppCompatActivity() {
         userAdapter = UserAdapter(this, userList, false)
         recyclerView.adapter = userAdapter
 
-        idList = ArrayList<String>()
+        idList = ArrayList()
 
         when (title) {
             "likes" -> getLikes()

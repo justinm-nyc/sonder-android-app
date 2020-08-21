@@ -91,7 +91,7 @@ class HomeFragment : Fragment() {
     }
 
     fun readPosts(){
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         reference.addValueEventListener(object: ValueEventListener {
             override fun onCancelled(error: DatabaseError) {}
 

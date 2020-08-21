@@ -8,12 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.CommentsActivity
 import com.android.sonder_app.FollowersActivity
-import com.android.sonder_app.Fragment.PostDetailsFragment
 import com.android.sonder_app.Fragment.ProfileFragment
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.User
@@ -60,6 +60,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             holder.description.text = post.getDescription()
         }
 
+        holder.location.text = post.getLocation()
+        holder.ratingBar.rating = post.getRating()
+        holder.price.rating = post.getPrice()
+        
         publisherInfo(holder.imageProfile, holder.username, post.getPublisher())
 
         isLiked(post.getPostid(), holder.like)
@@ -97,12 +101,6 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ProfileFragment()).commit()
         }
 
-//        holder.postImage.setOnClickListener {
-//            val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
-//            editor.putString("postid", post.getPostid())
-//            editor.apply()
-//            (mContext as FragmentActivity).supportFragmentManager.beginTransaction().replace(R.id.fragment_container, PostDetailsFragment()).commit()
-//        }
 
         holder.username.setOnClickListener {
             val editor: SharedPreferences.Editor = mContext.getSharedPreferences("PREPS",Context.MODE_PRIVATE).edit()
@@ -137,7 +135,11 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         var comment: ImageView = itemView.findViewById(R.id.comment)
         var save: ImageView = itemView.findViewById(R.id.save)
 
+        var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
+        var price: RatingBar = itemView.findViewById(R.id.priceBar)
+
         var username: TextView = itemView.findViewById(R.id.username)
+        var location: TextView = itemView.findViewById(R.id.location)
         var likes: TextView = itemView.findViewById(R.id.likes)
         var comments: TextView = itemView.findViewById(R.id.comments)
         var description: TextView = itemView.findViewById(R.id.description)
@@ -165,7 +167,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.child(firebaseUser.uid).exists()) {
                     imageView.setImageResource(R.drawable.ic_liked)
-                    imageView.setTag("liked")
+                    imageView.tag = "liked"
                 } else {
                     imageView.setImageResource(R.drawable.ic_like)
                     imageView.tag = "like"
@@ -185,7 +187,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
     }
 
     private fun numLikes(likes: TextView, postid: String) {
-        var reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
+        val reference = FirebaseDatabase.getInstance().reference.child("Likes").child(postid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
@@ -201,13 +203,13 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         username: TextView,
         userid: String
     ) {
-        var reference = FirebaseDatabase.getInstance().getReference("Users").child(userid)
+        val reference = FirebaseDatabase.getInstance().getReference("Users").child(userid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                var user: User = dataSnapshot.getValue(User::class.java)!!
+                val user: User = dataSnapshot.getValue(User::class.java)!!
                 Glide.with(mContext).load(user.getImageurl()).into(image_profile)
                 username.text = user.getUsername()
             }

@@ -97,7 +97,7 @@ class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.ViewHolder>
     }
 
     fun getPostImage(imageView: ImageView, postid: String) {
-        val reference = FirebaseDatabase.getInstance().getReference("posts").child(postid)
+        val reference = FirebaseDatabase.getInstance().getReference("Posts").child(postid)
 
         reference.addValueEventListener(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {

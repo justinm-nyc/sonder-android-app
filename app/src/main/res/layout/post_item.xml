@@ -30,15 +30,38 @@
                     android:layout_margin="10dp"
                     android:src="@mipmap/ic_launcher" />
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp">
                 <TextView
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="user name"
+                    android:text="username"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/location_icon"
+                        android:layout_width="10sp"
+                        android:layout_height="16sp"
+                        android:src="@drawable/ic_location"
+                        android:layout_below="@+id/username"
+                        android:contentDescription="location_icon" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/username"
+                    android:layout_toEndOf="@+id/location_icon"
+                    android:text="location"
+                    android:textColor="@color/colorGray"
+                    android:textSize="12sp" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -121,6 +144,29 @@
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/comment"
                 android:textColor="@color/colorAccent" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/priceBar"
+                android:layout_marginEnd="30dp"
+                android:max="5"
+                android:progressTint="@color/colorRatingYellow"
+                android:stepSize="1" />
+
+            <RatingBar
+                android:id="@+id/priceBar"
+                style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:max="5"
+                android:progressTint="#8AC448"
+                android:stepSize="1" />
 
         </RelativeLayout>
 

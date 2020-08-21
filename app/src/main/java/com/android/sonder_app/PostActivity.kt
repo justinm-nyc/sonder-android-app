@@ -26,8 +26,12 @@ class PostActivity : AppCompatActivity() {
     private lateinit var imageUrl: String
     private lateinit var uploadTask: StorageTask<UploadTask.TaskSnapshot>
     private lateinit var storageReference: StorageReference
+    private lateinit var taggedList: HashMap<String, Boolean>
+    private lateinit var link: EditText
+    private lateinit var location: EditText
     private lateinit var description: EditText
     private lateinit var ratingBar: RatingBar
+    private lateinit var priceBar: RatingBar
     private lateinit var categorySpinner: Spinner
     private lateinit var subCategorySpinner: Spinner
     private lateinit var selectedCategory: String
@@ -43,10 +47,13 @@ class PostActivity : AppCompatActivity() {
         setContentView(R.layout.activity_post)
 
         close = findViewById(R.id.close)
+        link = findViewById(R.id.link)
+        location = findViewById(R.id.location)
         description = findViewById(R.id.description)
         categorySpinner = findViewById(R.id.select_category)
         subCategorySpinner = findViewById(R.id.select_sub_category)
         ratingBar = findViewById(R.id.ratingBar)
+        priceBar = findViewById(R.id.priceBar)
         imageAdded = findViewById(R.id.image_added)
         post = findViewById(R.id.post)
         progressBar = findViewById(R.id.progress_bar)
@@ -56,6 +63,9 @@ class PostActivity : AppCompatActivity() {
 //        setSupportActionBar(toolbar)
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
+        taggedList = HashMap()
+        //FOR TESTING PURPOSES
+        taggedList["XTICi9lfBddQHBwhkPg1OCwnXyi1"] = true
 
         selectedCategory = ""
         selectedSubCategory =""
@@ -123,7 +133,7 @@ class PostActivity : AppCompatActivity() {
 
         }
 
-        storageReference = FirebaseStorage.getInstance().getReference("posts")
+        storageReference = FirebaseStorage.getInstance().getReference("Posts")
         close.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -162,17 +172,20 @@ class PostActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     imageUrl = downloadUri.toString()
-                    val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+                    val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
                     val postid: String = reference.push().key!!
                     val hashMap: HashMap<String, Any>  = HashMap()
                     hashMap["postid"] = postid
                     hashMap["postimage"] = imageUrl
-//                    hashMap["rating"] = ratingBar.numStars
-//                    hashMap["category"] = selectedCategory
-//                    hashMap["subcategory"] = selectedSubCategory
+                    hashMap["location"] = location.text.toString()
+                    hashMap["tagged"] = taggedList
+                    hashMap["rating"] = ratingBar.rating
+                    hashMap["pricing"] = priceBar.rating
+                    hashMap["link"] = link.text.toString()
+                    hashMap["category"] = selectedCategory
+                    hashMap["subcategory"] = selectedSubCategory
                     hashMap["description"] = description.text.toString()
                     hashMap["publisher"] = FirebaseAuth.getInstance().currentUser?.uid!!
-
 
                     reference.child(postid).setValue(hashMap)
                     progressBar.visibility = View.GONE

@@ -317,7 +317,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun getNumPosts() {
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
@@ -337,7 +337,7 @@ class ProfileFragment : Fragment() {
     }
 
     private fun myPhotos() {
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
 
@@ -376,7 +376,7 @@ class ProfileFragment : Fragment() {
 
     fun readSaves() {
         Log.d(TAG, "readSaves() was clicked")
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("posts")
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Posts")
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
