@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         bottomNavigationView.labelVisibilityMode = LabelVisibilityMode.LABEL_VISIBILITY_UNLABELED
 
-        var intent: Bundle? = intent.extras
+        val intent: Bundle? = intent.extras
 
         if(intent!=null){
             val publisher: String? = intent.getString("publisherid")

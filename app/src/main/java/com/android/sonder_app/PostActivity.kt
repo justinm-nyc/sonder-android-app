@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
@@ -27,6 +28,10 @@ class PostActivity : AppCompatActivity() {
     private lateinit var storageReference: StorageReference
     private lateinit var description: EditText
     private lateinit var ratingBar: RatingBar
+    private lateinit var categorySpinner: Spinner
+    private lateinit var subCategorySpinner: Spinner
+    private lateinit var selectedCategory: String
+    private lateinit var selectedSubCategory: String
     private lateinit var imageAdded: ImageView
     private lateinit var close: ImageView
     private lateinit var post: TextView
@@ -39,6 +44,8 @@ class PostActivity : AppCompatActivity() {
 
         close = findViewById(R.id.close)
         description = findViewById(R.id.description)
+        categorySpinner = findViewById(R.id.select_category)
+        subCategorySpinner = findViewById(R.id.select_sub_category)
         ratingBar = findViewById(R.id.ratingBar)
         imageAdded = findViewById(R.id.image_added)
         post = findViewById(R.id.post)
@@ -48,6 +55,73 @@ class PostActivity : AppCompatActivity() {
 //        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
 //        setSupportActionBar(toolbar)
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
+        selectedCategory = ""
+        selectedSubCategory =""
+
+        val categories = ArrayList<String>()
+        categories.add("Select Category")
+        categories.add("Food")
+        categories.add("Outdoor")
+        categories.add("Nightlife")
+        categories.add("Entertainment")
+        categories.add("Shopping")
+
+        val subCategories = ArrayList<String>()
+        subCategories.add("Select Sub Category")
+        subCategories.add("BARS")
+        subCategories.add("ROOF TOPS")
+        subCategories.add("NIGHTCLUBS")
+        subCategories.add("EVENTS")
+
+        val categoryAdapter = ArrayAdapter<String> (this, R.layout.spinner_item, categories)
+        categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        categorySpinner.adapter = categoryAdapter
+        categorySpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedCategory = when {
+                    categorySpinner.selectedItem != "Select Category" -> {
+                        categorySpinner.selectedItem.toString()
+                    }
+                    else -> {
+                        ""
+                    }
+                }
+            }
+
+        }
+
+        val subCategoryAdapter = ArrayAdapter<String> (this, R.layout.spinner_item, subCategories)
+        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        subCategorySpinner.adapter = subCategoryAdapter
+        subCategorySpinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                selectedSubCategory = when {
+                    subCategorySpinner.selectedItem != "Select Sub Category" -> {
+                        subCategorySpinner.selectedItem.toString()
+                    }
+                    else -> {
+                        ""
+                    }
+                }
+            }
+
+        }
 
         storageReference = FirebaseStorage.getInstance().getReference("posts")
         close.setOnClickListener{
@@ -62,6 +136,7 @@ class PostActivity : AppCompatActivity() {
 
         CropImage.activity().setAspectRatio(1,1).start(this)
     }
+
 
     private fun getFileExtension(uri: Uri): String? {
         val contentResolver: ContentResolver = contentResolver
@@ -93,6 +168,8 @@ class PostActivity : AppCompatActivity() {
                     hashMap["postid"] = postid
                     hashMap["postimage"] = imageUrl
 //                    hashMap["rating"] = ratingBar.numStars
+//                    hashMap["category"] = selectedCategory
+//                    hashMap["subcategory"] = selectedSubCategory
                     hashMap["description"] = description.text.toString()
                     hashMap["publisher"] = FirebaseAuth.getInstance().currentUser?.uid!!
 
@@ -131,5 +208,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             finish()
         }
     }
+
+
 
 }

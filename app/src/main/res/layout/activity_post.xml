@@ -102,12 +102,33 @@
 
                 <RatingBar
                     android:id="@+id/ratingBar"
+                    style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/post"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:isIndicator="false"
                     android:max="5"
                     android:progressTint="@color/colorRatingYellow"
+                    android:stepSize="1" />
+
+
+                <RatingBar
+                    android:id="@+id/priceBar"
+                    style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ratingBar"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="15dp"
+                    android:layout_marginBottom="15dp"
+                    android:max="5"
                     android:stepSize="1" />
 
             </RelativeLayout>
@@ -151,7 +172,7 @@
             android:textSize="14sp" />
 
 
-        <TextView
+        <Spinner
             android:id="@+id/select_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -160,20 +181,17 @@
             android:background="@drawable/edittext_background"
             android:padding="5dp"
             android:text="@string/select_category"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorWhite" />
+            android:textColor="@color/colorWhite"/>
 
-        <TextView
+        <Spinner
             android:id="@+id/select_sub_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:autofillHints="Add a link"
             android:background="@drawable/edittext_background"
-            android:hint="@string/select_sub_category"
             android:padding="5dp"
-            android:textColor="@color/colorWhite"
-            android:textColorHint="@color/colorWhite" />
+            android:hint="@string/select_sub_category"
+            android:textColor="@color/colorWhite" />
 
         <EditText
             android:id="@+id/description"
