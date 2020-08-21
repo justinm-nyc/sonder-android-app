@@ -39,13 +39,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="username"
+                    android:layout_marginStart="2dp"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
                     <ImageView
                         android:id="@+id/location_icon"
-                        android:layout_width="10sp"
+                        android:layout_width="12sp"
                         android:layout_height="16sp"
                         android:src="@drawable/ic_location"
                         android:layout_below="@+id/username"

@@ -38,7 +38,7 @@ class PostActivity : AppCompatActivity() {
     private lateinit var selectedSubCategory: String
     private lateinit var imageAdded: ImageView
     private lateinit var close: ImageView
-    private lateinit var post: TextView
+    private lateinit var doneButton: TextView
     private lateinit var progressBar: ProgressBar
 
 
@@ -55,7 +55,7 @@ class PostActivity : AppCompatActivity() {
         ratingBar = findViewById(R.id.ratingBar)
         priceBar = findViewById(R.id.priceBar)
         imageAdded = findViewById(R.id.image_added)
-        post = findViewById(R.id.post)
+        doneButton = findViewById(R.id.post)
         progressBar = findViewById(R.id.progress_bar)
 
         //TODO: SET THE UP BUTTON SO THAT WHEN IT IS CLICKED, THE EDIT PHOTO ACTIVITY IS WHAT IS SHOWN
@@ -140,8 +140,24 @@ class PostActivity : AppCompatActivity() {
             finish()
         }
 
-        post.setOnClickListener{
-            uploadImage()
+        doneButton.setOnClickListener{
+            if(selectedCategory == "") {
+                Toast.makeText(
+                    baseContext, "Select a category",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            if(location.text.toString() == ""){
+                Toast.makeText(
+                    baseContext, "Select a location",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            if(location.text.toString() != "" && selectedCategory != ""){
+                uploadImage()
+            }
         }
 
         CropImage.activity().setAspectRatio(1,1).start(this)
