@@ -63,7 +63,42 @@
             android:visibility="gone" />
 
     </com.google.android.material.appbar.AppBarLayout>
+    <RelativeLayout
+        android:id="@+id/select_location_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
 
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/google_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"/>
+
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/search_location"
+            android:queryHint="Search..."
+            android:iconifiedByDefault="false"
+            android:layout_margin="10dp"
+            android:elevation="5dp"
+            android:background="@drawable/bg_round"/>
+
+        <Button
+            android:id="@+id/select_location_button"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="75dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/colorBlue"
+            android:text="Select"
+            android:visibility="gone"
+            android:textColor="@android:color/white" />
+
+
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -71,6 +106,7 @@
         android:paddingLeft="12dp"
         android:paddingRight="12dp"
         android:paddingBottom="12dp">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -147,14 +183,14 @@
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite" />
 
-        <EditText
+        <TextView
             android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:background="@drawable/edittext_background"
-            android:hint="@string/location"
             android:padding="5dp"
+            android:text="@string/location"
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
             android:textSize="14sp" />
@@ -172,7 +208,6 @@
             android:textColor="@color/colorWhite"
             android:textColorHint="@color/colorWhite"
             android:textSize="14sp" />
-
 
         <Spinner
             android:id="@+id/select_category"
@@ -209,4 +244,5 @@
             android:textSize="14sp" />
 
     </LinearLayout>
+
 </LinearLayout>
