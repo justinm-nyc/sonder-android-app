@@ -1,23 +1,29 @@
 package com.android.sonder_app
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentResolver
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -46,6 +52,8 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var searchLocationView: SearchView
     private lateinit var selectLocationView: RelativeLayout
     private lateinit var selectLocationButton: Button
+    private lateinit var currentLocation: Location
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var ratingBar: RatingBar
     private lateinit var priceBar: RatingBar
@@ -82,33 +90,46 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
 
         location.setOnClickListener {
             selectLocationView.visibility = View.VISIBLE
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
+            if (ActivityCompat.checkSelfPermission(
+                    this@PostActivity,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                getCurrentLocation()
+            } else {
+                val permissions: Array<out String> =
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION)
+                ActivityCompat.requestPermissions(this@PostActivity, permissions, 44)
+            }
         }
-
-
-        searchLocationView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+        searchLocationView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 map.clear()
                 val currentLocation = searchLocationView.query.toString()
                 var addressList: List<Address>? = null
 
-                if(currentLocation != null || currentLocation != ""){
+                if (currentLocation != null || currentLocation != "") {
                     val geocoder = Geocoder(this@PostActivity)
                     try {
                         addressList = geocoder.getFromLocationName(currentLocation, 1)
-                    } catch (e: IOException){
+                    } catch (e: IOException) {
                         e.printStackTrace()
                     }
 
                     if (addressList != null) {
-                        if (addressList.isNotEmpty()){
+                        if (addressList.isNotEmpty()) {
                             val address = addressList[0]
                             val latLng = LatLng(address.latitude, address.longitude)
-                            map.addMarker(latLng.let { MarkerOptions().position(it).title(currentLocation) })
+                            map.addMarker(latLng.let {
+                                MarkerOptions().position(it).title(currentLocation)
+                            })
                             map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10F))
                             selectLocationButton.visibility = View.VISIBLE
 
                             selectLocationButton.setOnClickListener {
                                 selectedLocation = address.featureName
+                                map.clear()
                                 location.text = selectedLocation
                                 selectLocationView.visibility = View.GONE
                                 selectLocationButton.visibility = View.GONE
@@ -129,9 +150,7 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
                 return false
             }
         })
-
         mapFragment.getMapAsync(this)
-
 
         //TODO: SET THE UP BUTTON SO THAT WHEN IT IS CLICKED, THE EDIT PHOTO ACTIVITY IS WHAT IS SHOWN
 //        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar)
@@ -300,7 +319,6 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -323,6 +341,53 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap?) {
         if (googleMap != null) {
             map = googleMap
+        }
+    }
+
+    private fun getCurrentLocation() {
+        val task: Task<Location> = fusedLocationProviderClient.lastLocation;
+        task.addOnSuccessListener { currentLocation ->
+            mapFragment.getMapAsync {
+                val latLng = LatLng(currentLocation.latitude, currentLocation.longitude)
+                val options: MarkerOptions =
+                    MarkerOptions().position(latLng).title("Current Location")
+                map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10F))
+                map.addMarker(options)
+
+                val geocoder = Geocoder(this@PostActivity)
+                var addressList: List<Address>? = null
+                addressList =
+                    geocoder.getFromLocation(currentLocation.latitude, currentLocation.longitude, 1)
+                if (addressList != null) {
+                    if (addressList.isNotEmpty()) {
+                        val address = addressList[0]
+                        selectLocationButton.visibility = View.VISIBLE
+
+                        selectLocationButton.setOnClickListener {
+                            selectedLocation = address.adminArea + ", " + address.countryName
+                            map.clear()
+                            location.text = selectedLocation
+                            selectLocationView.visibility = View.GONE
+                            selectLocationButton.visibility = View.GONE
+
+                        }
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 44) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                selectLocationView.visibility = View.VISIBLE
+                getCurrentLocation()
+            }
         }
     }
 
