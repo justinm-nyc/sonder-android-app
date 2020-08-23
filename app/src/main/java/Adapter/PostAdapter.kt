@@ -53,6 +53,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         Glide.with(mContext).load(post.getPostimage()).into(holder.postImage)
 
+        if(post.getLink() != ""){
+            holder.readMore.visibility = View.VISIBLE
+        }
+
         if (post.getDescription() == "") {
             holder.description.visibility = View.GONE
         } else {
@@ -137,7 +141,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
         var price: io.techery.properratingbar.ProperRatingBar = itemView.findViewById(R.id.priceBar)
-
+        var readMore: TextView = itemView.findViewById(R.id.read_more)
         var username: TextView = itemView.findViewById(R.id.username)
         var location: TextView = itemView.findViewById(R.id.location)
         var likes: TextView = itemView.findViewById(R.id.likes)

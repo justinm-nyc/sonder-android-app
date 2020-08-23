@@ -99,9 +99,17 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
+            android:id="@+id/read_more"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/stories_bar_gradient"/>
+            android:layout_height="25dp"
+            android:text="@string/read_more"
+            android:textStyle="bold"
+            android:gravity="right|center_vertical"
+            android:textColor="@color/colorWhite"
+            android:alpha=".8"
+            android:visibility="gone"
+            android:background="@drawable/link_bar_gradient"
+            />
 
         <TextView
             android:id="@+id/description"
