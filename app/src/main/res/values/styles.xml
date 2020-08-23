@@ -8,9 +8,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="CustomPriceRatingBarStyle"  parent="@android:style/Widget.RatingBar">
-        <item name="android:progressDrawable">@drawable/custom_price_rating_bar</item>
-        <item name="android:minHeight">15dip</item>
-        <item name="android:maxHeight">80dip</item>
-    </style>
 </resources>

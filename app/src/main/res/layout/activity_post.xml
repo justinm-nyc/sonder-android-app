@@ -152,22 +152,27 @@
                     android:progressTint="@color/colorRatingYellow"
                     android:stepSize="1" />
 
-
-                <RatingBar
+                <io.techery.properratingbar.ProperRatingBar
                     android:id="@+id/priceBar"
-                    style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/ratingBar"
                     android:layout_alignParentEnd="true"
                     android:layout_marginStart="15dp"
                     android:layout_marginTop="15dp"
-                    android:layout_marginEnd="15dp"
+                    android:layout_marginEnd="25dp"
                     android:layout_marginBottom="15dp"
-                    android:isIndicator="false"
                     android:max="5"
-                    android:progressTint="#8AC448"
-                    android:stepSize="1" />
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:stepSize="1"
+                    app:prb_defaultRating="0"
+                    app:prb_clickable="true"
+                    app:prb_symbolicTick="$"
+                    app:prb_symbolicTickNormalColor="@android:color/darker_gray"
+                    app:prb_symbolicTickSelectedColor="#8AC448"
+                    app:prb_totalTicks="5"
+                    />
 
             </RelativeLayout>
 

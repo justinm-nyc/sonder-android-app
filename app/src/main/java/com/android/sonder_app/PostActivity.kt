@@ -52,11 +52,10 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var searchLocationView: SearchView
     private lateinit var selectLocationView: RelativeLayout
     private lateinit var selectLocationButton: Button
-    private lateinit var currentLocation: Location
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var ratingBar: RatingBar
-    private lateinit var priceBar: RatingBar
+    private lateinit var priceBar: io.techery.properratingbar.ProperRatingBar
     private lateinit var categorySpinner: Spinner
     private lateinit var subCategorySpinner: Spinner
     private lateinit var selectedLocation: String

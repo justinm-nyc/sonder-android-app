@@ -62,7 +62,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         holder.location.text = post.getLocation()
         holder.ratingBar.rating = post.getRating()
-        holder.price.rating = post.getPrice()
+        holder.price.rating = post.getPricing()
         
         publisherInfo(holder.imageProfile, holder.username, post.getPublisher())
 
@@ -136,7 +136,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         var save: ImageView = itemView.findViewById(R.id.save)
 
         var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
-        var price: RatingBar = itemView.findViewById(R.id.priceBar)
+        var price: io.techery.properratingbar.ProperRatingBar = itemView.findViewById(R.id.priceBar)
 
         var username: TextView = itemView.findViewById(R.id.username)
         var location: TextView = itemView.findViewById(R.id.location)

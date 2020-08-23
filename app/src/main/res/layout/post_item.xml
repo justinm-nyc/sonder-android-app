@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -97,6 +99,11 @@
             android:src="@mipmap/ic_launcher" />
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/stories_bar_gradient"/>
+
+        <TextView
             android:id="@+id/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -158,16 +165,21 @@
                 android:progressTint="@color/colorRatingYellow"
                 android:stepSize="1" />
 
-            <RatingBar
+            <io.techery.properratingbar.ProperRatingBar
                 android:id="@+id/priceBar"
-                style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:textStyle="bold"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:max="5"
-                android:progressTint="#8AC448"
-                android:stepSize="1" />
+                android:stepSize="1"
+                app:prb_symbolicTick="$"
+                app:prb_symbolicTickNormalColor="@android:color/darker_gray"
+                app:prb_symbolicTickSelectedColor="#8AC448"
+                app:prb_totalTicks="5"
+                />
 
         </RelativeLayout>
 

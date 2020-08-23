@@ -11,9 +11,9 @@ class Post {
     private lateinit var publisher: String
     private lateinit var tagged: HashMap<String, Boolean>
     private var rating: Float = 0F
-    private var price: Float = 0F
+    private var pricing: Int = 0
 
-    constructor(postid: String, postimage: String, description: String, location: String, link: String, category: String, subcategory: String, rating: Float, price: Float, tagged: HashMap<String, Boolean>, publisher: String) {
+    constructor(postid: String, postimage: String, description: String, location: String, link: String, category: String, subcategory: String, rating: Float, pricing: Int, tagged: HashMap<String, Boolean>, publisher: String) {
         this.postid = postid
         this.postimage = postimage
         this.description = description
@@ -21,7 +21,7 @@ class Post {
         this.link = link
         this.category = category
         this.subcategory = subcategory
-        this.price = price
+        this.pricing = pricing
         this.rating = rating
         this.publisher = publisher
         this.tagged = tagged
@@ -94,12 +94,12 @@ class Post {
         this.subcategory = subcategory
     }
 
-    fun getPrice(): Float {
-        return this.price
+    fun getPricing(): Int {
+        return this.pricing
     }
 
-    fun setPrice(price: Float) {
-        this.price = price
+    fun setPricing(pricing: Int) {
+        this.pricing = pricing
     }
 
     fun getRating(): Float {
