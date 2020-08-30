@@ -17,7 +17,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
     val TAG = "MyMessage:"
-
     private lateinit var bottomNavigationView: BottomNavigationView
     private var selectFragment: Fragment? = null
 

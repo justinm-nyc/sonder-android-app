@@ -33,7 +33,6 @@
     <string name="sub_category_roof_tops">ROOF TOPS</string>
     <string name="sub_category_nightclubs">NIGHTCLUBS</string>
     <string name="sub_category_events">EVENTS</string>
-    <string name="map_key" translateable="false">AIzaSyDQ4iMe3JDeV8zjekPVYjtoCQIAxLia1K8</string>
     <string name="read_more"><![CDATA["Read more >    "]]></string>
 
 </resources>

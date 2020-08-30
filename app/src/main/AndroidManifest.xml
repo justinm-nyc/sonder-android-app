@@ -38,7 +38,7 @@
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
 
-        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/map_key"/>
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="@string/ApiKey"/>
     </application>
 
 </manifest>
