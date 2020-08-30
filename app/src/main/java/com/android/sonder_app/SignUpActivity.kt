@@ -2,8 +2,6 @@ package com.android.sonder_app
 
 import android.content.Intent
 import android.content.Intent.*
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
