@@ -4,12 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.CommentsActivity
@@ -26,7 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
+class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder>, PopupMenu.OnMenuItemClickListener {
     private val TAG = "MyMessage:"
     private var mContext: Context
     private var mPost: List<Post>
@@ -91,6 +87,10 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
         }
 
+        holder.options.setOnClickListener {
+            showPostMenu(holder.options)
+        }
+
         holder.comments.setOnClickListener {
             val intent = Intent(mContext, CommentsActivity::class.java)
             intent.putExtra("postid",post.getPostid())
@@ -138,6 +138,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         var like: ImageView = itemView.findViewById(R.id.like)
         var comment: ImageView = itemView.findViewById(R.id.comment)
         var save: ImageView = itemView.findViewById(R.id.save)
+        var options: ImageView = itemView.findViewById(R.id.options)
 
         var ratingBar: RatingBar = itemView.findViewById(R.id.ratingBar)
         var price: io.techery.properratingbar.ProperRatingBar = itemView.findViewById(R.id.priceBar)
@@ -220,7 +221,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         })
     }
 
-    fun isSaved(postId: String, imageView: ImageView){
+    private fun isSaved(postId: String, imageView: ImageView){
         val firebaseUser: FirebaseUser = FirebaseAuth.getInstance().currentUser!!
         val reference = FirebaseDatabase.getInstance().reference.child("Saves").child(firebaseUser.uid)
 
@@ -239,5 +240,25 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 }
             }
         })
+    }
+
+    fun showPostMenu(view: View) {
+       val popup: PopupMenu = PopupMenu(mContext, view)
+        popup.setOnMenuItemClickListener(this)
+        popup.inflate(R.menu.post_menu)
+        popup.show()
+    }
+
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.post_edit -> {
+                Toast.makeText(mContext, "Edit clicked", Toast.LENGTH_SHORT).show()
+                return true}
+            R.id.post_delete -> {
+                Toast.makeText(mContext, "Delete clicked", Toast.LENGTH_SHORT).show()
+                return true;
+            }
+        }
+        return false
     }
 }

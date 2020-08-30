@@ -95,7 +95,7 @@ class EditProfileActivity : AppCompatActivity() {
 
     private fun updateProfile(fullname: String, username: String, bio: String) {
         val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.uid)
-        val hashMap: HashMap<String, String> = HashMap<String, String>()
+        val hashMap: HashMap<String, String> = HashMap()
         hashMap["fullname"] = fullname
         hashMap["username"] = username
         hashMap["bio"] = bio
@@ -149,7 +149,7 @@ class EditProfileActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK){
-            var result: CropImage.ActivityResult = CropImage.getActivityResult(data)
+            val result: CropImage.ActivityResult = CropImage.getActivityResult(data)
             mImageUri = result.uri
             uploadImage()
         } else {

@@ -119,7 +119,7 @@
                 android:layout_gravity="top"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:src="@mipmap/ic_launcher" />
+                android:src="@mipmap/ic_launcher"/>
 
             <RelativeLayout
                 android:layout_width="0dp"
