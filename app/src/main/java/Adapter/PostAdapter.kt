@@ -3,9 +3,11 @@ package Adapter
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.CommentsActivity
@@ -53,7 +55,14 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
         if (post.getLink() != "") {
             holder.readMore.visibility = View.VISIBLE
+            holder.readMore.setOnClickListener {
+                Log.d(TAG, "readMore was clicked")
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.data = Uri.parse(post.getLink())
+                mContext.startActivity(intent)
+            }
         }
+
 
         if (post.getDescription() == "") {
             holder.description.visibility = View.GONE
@@ -310,5 +319,7 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
         })
 
     }
+
+
 
 }
