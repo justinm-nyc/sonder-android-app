@@ -82,6 +82,7 @@ class SignInActivity : AppCompatActivity() {
 
             if(TextUtils.isEmpty(strEmail) || TextUtils.isEmpty(strPassword)) {
                 Toast.makeText(this@SignInActivity, "All Fields are Required!", Toast.LENGTH_SHORT).show()
+                progressBar.visibility = View.GONE; // To show the ProgressBar
             } else {
                 auth.signInWithEmailAndPassword(strEmail, strPassword)
                     .addOnCompleteListener(this) { task ->

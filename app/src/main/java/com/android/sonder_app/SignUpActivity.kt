@@ -23,6 +23,7 @@ class SignUpActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var txt_signin: TextView
     private lateinit var signup: Button
+    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
 
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
@@ -39,9 +40,19 @@ class SignUpActivity : AppCompatActivity() {
         txt_signin = findViewById(R.id.txt_signin)
         signup = findViewById(R.id.signup)
         progressBar = findViewById<ProgressBar>(R.id.progress_bar)
-
+        toolbar = findViewById(R.id.toolbar)
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener {
+            startActivity(
+                Intent(
+                    applicationContext,
+                    StartActivity::class.java
+                )
+            )
+        }
 
         txt_signin.setOnClickListener{
             val intent = Intent(this, SignInActivity::class.java)
