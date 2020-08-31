@@ -61,7 +61,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             android:gravity="center"
             android:orientation="vertical"
             android:padding="16dp"
@@ -79,10 +78,11 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:hint="@string/username"
                 android:inputType="text"
-                android:padding="10dp" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginBottom="10dp"/>
 
             <TextView
                 android:layout_width="match_parent"
@@ -96,10 +96,11 @@
                 android:id="@+id/fullname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:hint="@string/full_name"
                 android:inputType="textPersonName"
-                android:padding="10dp" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginBottom="10dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -113,10 +114,11 @@
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
-                android:padding="10dp" />
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:layout_marginBottom="10dp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -126,14 +128,32 @@
                 android:text="@string/password"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/password"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/password_row"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:padding="10dp" />
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginEnd="30dp"
+                    android:hint="@string/password"
+                    app:layout_constraintTop_toTopOf="@+id/password_row"
+                    android:inputType="textPassword"
+                    android:padding="10dp" />
+
+                <ImageView
+                    android:id="@+id/show_pass_btn"
+                    android:alpha=".5"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintStart_toEndOf="@id/password"
+                    app:layout_constraintBottom_toBottomOf="@+id/password_row"
+                    app:layout_constraintEnd_toEndOf="@+id/password_row"
+                    android:src="@drawable/ic_visible_off_eye" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -143,14 +163,50 @@
                 android:text="Confirm Password"
                 android:textSize="20sp" />
 
-            <EditText
-                android:id="@+id/confirm_password"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/confirm_password_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="30dp"
+                    app:layout_constraintTop_toTopOf="@+id/confirm_password_row"
+                    android:hint="Re-Type Password"
+                    android:inputType="textPassword"
+                    android:padding="10dp" />
+
+                <ImageView
+                    android:id="@+id/show_pass_btn_2"
+                    android:alpha=".5"
+                    android:layout_height="match_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintStart_toEndOf="@id/confirm_password"
+                    app:layout_constraintBottom_toBottomOf="@+id/confirm_password_row"
+                    app:layout_constraintEnd_toEndOf="@+id/confirm_password_row"
+                    android:src="@drawable/ic_visible_off_eye" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/terms_and_conditions_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:hint="Re-Type Password"
-                android:inputType="textPassword"
-                android:padding="10dp" />
+                app:layout_constraintTop_toBottomOf="@id/confirm_password_row">
+
+                <CheckBox android:id="@+id/checkbox_agree"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/terms_and_conditions_agreement"
+                    app:layout_constraintStart_toEndOf="@id/checkbox_agree"
+                    app:layout_constraintTop_toTopOf="@id/terms_and_conditions_row"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <Button
                 android:id="@+id/signup"
