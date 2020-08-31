@@ -151,15 +151,15 @@ class ProfileFragment : Fragment() {
 
         followersButton.setOnClickListener {
             val intent: Intent = Intent(context, FollowersActivity::class.java)
-            intent.putExtra("id",profileid)
-            intent.putExtra("title","followers")
+            intent.putExtra("id", profileid)
+            intent.putExtra("title", "followers")
             startActivity(intent)
         }
 
         followingButton.setOnClickListener {
             val intent: Intent = Intent(context, FollowersActivity::class.java)
-            intent.putExtra("id",profileid)
-            intent.putExtra("title","following")
+            intent.putExtra("id", profileid)
+            intent.putExtra("title", "following")
             startActivity(intent)
         }
 
@@ -169,6 +169,7 @@ class ProfileFragment : Fragment() {
         }
 
         editProfile.setOnClickListener {
+            Log.d(TAG, "editProfile button clicked")
             when (editProfile.text.toString()) {
                 "Edit Profile" -> {
                     val intent = Intent(context, EditProfileActivity::class.java)
@@ -179,8 +180,8 @@ class ProfileFragment : Fragment() {
                         .child("following").child(profileid).setValue(true)
                     FirebaseDatabase.getInstance().reference.child("Follow").child(profileid)
                         .child("followers").child(firebaseUser.uid).setValue(true)
-
                     addNotifications()
+                    checkFollow()
 
                 }
                 "following" -> {
@@ -254,8 +255,9 @@ class ProfileFragment : Fragment() {
 
     }
 
-    private fun addNotifications(){
-        val reference = FirebaseDatabase.getInstance().getReference("Notifications").child(profileid)
+    private fun addNotifications() {
+        val reference =
+            FirebaseDatabase.getInstance().getReference("Notifications").child(profileid)
         val hashMap: HashMap<String, Any> = HashMap()
         hashMap["userid"] = firebaseUser.uid
         hashMap["text"] = "Started following you "
@@ -265,19 +267,15 @@ class ProfileFragment : Fragment() {
     }
 
     private fun checkFollow() {
-        val reference: DatabaseReference =
-            FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
-                .child("following")
-        reference.addValueEventListener(object :
-            ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {
-            }
+        val reference: DatabaseReference = FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid).child("following")
+        reference.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {}
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.child(profileid).exists()) {
-                    editProfile.text = getString(R.string.following)
+                    editProfile.text = "following"
                 } else {
-                    editProfile.text = getString(R.string.follow)
+                    editProfile.text = "follow"
                 }
             }
 
@@ -360,7 +358,8 @@ class ProfileFragment : Fragment() {
     private fun mysaves() {
         Log.d(TAG, "mysaves() called")
         mySaves = ArrayList<String>()
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Saves").child(firebaseUser.uid)
+        val reference: DatabaseReference =
+            FirebaseDatabase.getInstance().getReference("Saves").child(firebaseUser.uid)
         reference.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
             }
@@ -384,8 +383,8 @@ class ProfileFragment : Fragment() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (snapshot in dataSnapshot.children) {
                     val post: Post = snapshot.getValue(Post::class.java)!!
-                    for(id: String in mySaves){
-                        if(post.getPostid() == id){
+                    for (id: String in mySaves) {
+                        if (post.getPostid() == id) {
                             postListSaves.add(post)
                         }
                     }

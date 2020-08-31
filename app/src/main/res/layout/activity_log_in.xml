@@ -30,8 +30,10 @@
                     android:text="@string/forgot_password"
                     android:textSize="18sp"
                     android:textColor="@color/colorWhite"
+                    android:textAlignment="viewEnd"
                     app:layout_constraintTop_toTopOf="@id/constraintLayout"
                     app:layout_constraintEnd_toEndOf="@+id/constraintLayout"/>
+
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
@@ -42,7 +44,6 @@
                     android:textSize="40sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="1.0" />

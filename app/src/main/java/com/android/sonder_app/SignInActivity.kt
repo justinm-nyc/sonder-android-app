@@ -1,7 +1,6 @@
 package com.android.sonder_app
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
 import android.text.method.HideReturnsTransformationMethod
@@ -9,6 +8,7 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -24,6 +24,7 @@ class SignInActivity : AppCompatActivity() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
+    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +37,19 @@ class SignInActivity : AppCompatActivity() {
         txt_signup = findViewById(R.id.txt_signup)
         signin = findViewById(R.id.signin)
         progressBar = findViewById(R.id.progress_bar)
+        toolbar = findViewById(R.id.toolbar)
 
         auth = FirebaseAuth.getInstance()
+
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
+        toolbar.setNavigationOnClickListener {
+            startActivity(
+                Intent(
+                    applicationContext,
+                    StartActivity::class.java
+                )
+            )
+        }
 
         txt_signup.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)
@@ -45,7 +57,6 @@ class SignInActivity : AppCompatActivity() {
         }
 
         showPasswordButton.setOnClickListener {
-
                 if(password.transformationMethod == PasswordTransformationMethod.getInstance()){
                     showPasswordButton.setImageResource(R.drawable.ic_visible_eye);
 
