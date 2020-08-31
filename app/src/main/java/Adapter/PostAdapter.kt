@@ -101,31 +101,33 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
             }
         }
 
-        holder.options.setOnClickListener {
-                    Log.d(TAG, "OPTIONS was clicked")
-                    val popup = PopupMenu(mContext, holder.options)
-                    popup.inflate(R.menu.post_menu)
-                    popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
-                        override fun onMenuItemClick(item: MenuItem?): Boolean {
-                            when (item!!.itemId) {
-                                R.id.post_edit -> {
-                                    Toast.makeText(mContext, "Edit clicked", Toast.LENGTH_SHORT)
-                                        .show()
-                                    return true
-                                }
-                                R.id.post_delete -> {
-                                    Toast.makeText(mContext, "Delete clicked", Toast.LENGTH_SHORT)
-                                        .show()
-                                    deletePost(post.getPostid())
-                                    return true
-                                }
+        if(post.getPublisher() == FirebaseAuth.getInstance().currentUser!!.uid) {
+            holder.options.setOnClickListener {
+                Log.d(TAG, "OPTIONS was clicked")
+                val popup = PopupMenu(mContext, holder.options)
+                popup.inflate(R.menu.post_menu)
+                popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
+                    override fun onMenuItemClick(item: MenuItem?): Boolean {
+                        when (item!!.itemId) {
+                            R.id.post_edit -> {
+                                Toast.makeText(mContext, "Edit clicked", Toast.LENGTH_SHORT)
+                                    .show()
+                                return true
                             }
-                            return false
+                            R.id.post_delete -> {
+                                Toast.makeText(mContext, "Delete clicked", Toast.LENGTH_SHORT)
+                                    .show()
+                                deletePost(post.getPostid())
+                                return true
+                            }
                         }
+                        return false
+                    }
 
-                    })
-                    popup.show()
+                })
+                popup.show()
 
+            }
         }
 
         holder.comments.setOnClickListener {

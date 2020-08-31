@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.TextUtils
+import android.text.method.HideReturnsTransformationMethod
+import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -17,6 +19,7 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var email: EditText
     private lateinit var password: EditText
     private lateinit var txt_signup: TextView
+    private lateinit var showPasswordButton: ImageView
     private lateinit var signin: Button
 
     private lateinit var auth: FirebaseAuth
@@ -29,6 +32,7 @@ class SignInActivity : AppCompatActivity() {
 
         email = findViewById(R.id.email)
         password = findViewById(R.id.password)
+        showPasswordButton = findViewById(R.id.show_pass_btn)
         txt_signup = findViewById(R.id.txt_signup)
         signin = findViewById(R.id.signin)
         progressBar = findViewById(R.id.progress_bar)
@@ -38,6 +42,24 @@ class SignInActivity : AppCompatActivity() {
         txt_signup.setOnClickListener{
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+        }
+
+        showPasswordButton.setOnClickListener {
+
+                if(password.transformationMethod == PasswordTransformationMethod.getInstance()){
+                    showPasswordButton.setImageResource(R.drawable.ic_visible_eye);
+
+                    //Show Password
+                    password.transformationMethod = HideReturnsTransformationMethod.getInstance();
+                }
+                else{
+                    showPasswordButton.setImageResource(R.drawable.ic_visible_off_eye);
+
+                    //Hide Password
+                    password.transformationMethod = PasswordTransformationMethod.getInstance();
+
+                }
+
         }
 
         signin.setOnClickListener {
