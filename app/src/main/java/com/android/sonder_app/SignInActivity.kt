@@ -9,9 +9,11 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
+import kotlinx.android.synthetic.main.bottom_sheet_persistent.*
 
 class SignInActivity : AppCompatActivity() {
     val TAG = "MyMessage:"
@@ -21,6 +23,9 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var txt_signup: TextView
     private lateinit var showPasswordButton: ImageView
     private lateinit var signin: Button
+    private lateinit var termsAndConditionsBtn: TextView
+
+    private lateinit var bottomSheetBehavior: BottomSheetBehavior<LinearLayout>
 
     private lateinit var auth: FirebaseAuth
     private lateinit var reference: DatabaseReference
@@ -36,10 +41,16 @@ class SignInActivity : AppCompatActivity() {
         showPasswordButton = findViewById(R.id.show_pass_btn)
         txt_signup = findViewById(R.id.txt_signup)
         signin = findViewById(R.id.signin)
+        termsAndConditionsBtn = findViewById(R.id.terms_and_conditions_btn)
         progressBar = findViewById(R.id.progress_bar)
         toolbar = findViewById(R.id.toolbar)
 
         auth = FirebaseAuth.getInstance()
+
+        bottomSheetBehavior = BottomSheetBehavior.from(eula_bottom_sheet)
+        termsAndConditionsBtn.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+        }
 
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
         toolbar.setNavigationOnClickListener {

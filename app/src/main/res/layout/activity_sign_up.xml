@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:orientation="vertical">
 
@@ -57,7 +57,6 @@
                 android:visibility="gone" />
 
         </com.google.android.material.appbar.AppBarLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -203,7 +202,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/terms_and_conditions_agreement"
+                    android:text="@string/terms_and_conditions_agreement_request"
                     app:layout_constraintStart_toEndOf="@id/checkbox_agree"
                     app:layout_constraintTop_toTopOf="@id/terms_and_conditions_row"/>
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -225,5 +224,6 @@
                 android:text="Already have an account? Sign In" />
 
         </LinearLayout>
+
     </LinearLayout>
 </RelativeLayout>

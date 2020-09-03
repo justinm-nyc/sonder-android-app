@@ -1,147 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.android.sonder_app.SignInActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/bar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/windowBackground">
+        android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/start_screen_toolbar_gradient">
+            android:background="?android:attr/windowBackground">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/start_screen_toolbar_gradient">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraintLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:layout_margin="10dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/forgot_password"
+                        android:textSize="18sp"
+                        android:textColor="@color/colorWhite"
+                        android:textAlignment="viewEnd"
+                        app:layout_constraintTop_toTopOf="@id/constraintLayout"
+                        app:layout_constraintEnd_toEndOf="@+id/constraintLayout"/>
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/log_in"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="40sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="1.0" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.appcompat.widget.Toolbar>
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:indeterminate="true"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="16dp"
+            tools:context=".SignInActivity">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:text="Email"/>
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:hint="@string/email"
+                android:inputType="textEmailAddress"
+                android:padding="10dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:padding="10dp"
+                android:text="@string/password"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/constraintLayout"
+                android:id="@+id/password_row"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:layout_margin="10dp">
+                android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="30dp"
+                android:hint="@string/password"
+                app:layout_constraintTop_toTopOf="@+id/password_row"
+                android:inputType="textPassword"
+                android:padding="10dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/forgot_password"
-                    android:textSize="18sp"
-                    android:textColor="@color/colorWhite"
-                    android:textAlignment="viewEnd"
-                    app:layout_constraintTop_toTopOf="@id/constraintLayout"
-                    app:layout_constraintEnd_toEndOf="@+id/constraintLayout"/>
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/log_in"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/white"
-                    android:textSize="40sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0" />
-
+            <ImageView
+                android:id="@+id/show_pass_btn"
+                android:alpha=".5"
+                android:layout_height="match_parent"
+                android:layout_width="wrap_content"
+                android:layout_marginBottom="10dp"
+                app:layout_constraintStart_toEndOf="@id/password"
+                app:layout_constraintBottom_toBottomOf="@+id/password_row"
+                app:layout_constraintEnd_toEndOf="@+id/password_row"
+                android:src="@drawable/ic_visible_off_eye" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </androidx.appcompat.widget.Toolbar>
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:indeterminate="true"/>
-    </com.google.android.material.appbar.AppBarLayout>
+            <TextView
+                android:id="@+id/terms_and_conditions_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:padding="10dp"
+                android:text="By clicking login, you agree to our Terms and Conditions and that you have read out Privacy Policy"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="16dp"
-        tools:context=".SignInActivity">
+            <Button
+                android:id="@+id/signin"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/colorBlue"
+                android:text="@string/log_in"
+                android:textColor="@android:color/white" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:text="Email"/>
+            <TextView
+                android:id="@+id/txt_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/dont_have_an_account_register" />
+        </LinearLayout>
 
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:padding="10dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:text="@string/password"/>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/password_row"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="30dp"
-            android:hint="@string/password"
-            app:layout_constraintTop_toTopOf="@+id/password_row"
-            android:inputType="textPassword"
-            android:padding="10dp" />
-
-        <ImageView
-            android:id="@+id/show_pass_btn"
-            android:alpha=".5"
-            android:layout_height="match_parent"
-            android:layout_width="wrap_content"
-            android:layout_marginBottom="10dp"
-            app:layout_constraintStart_toEndOf="@id/password"
-            app:layout_constraintBottom_toBottomOf="@+id/password_row"
-            app:layout_constraintEnd_toEndOf="@+id/password_row"
-            android:src="@drawable/ic_visible_off_eye" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:padding="10dp"
-            android:text="By clicking login, you agree to our Terms and Conditions and that you have read out Privacy Policy"/>
-
-        <Button
-            android:id="@+id/signin"
-            android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:layout_marginTop="15dp"
-            android:background="@color/colorBlue"
-            android:text="@string/log_in"
-            android:textColor="@android:color/white" />
-
-        <TextView
-            android:id="@+id/txt_signup"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/dont_have_an_account_register" />
-
-
-    </LinearLayout>
-
-</RelativeLayout>
+    </RelativeLayout>
+    <include layout="@layout/bottom_sheet_persistent"/>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
