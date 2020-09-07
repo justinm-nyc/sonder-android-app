@@ -22,6 +22,8 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var password: EditText
     private lateinit var txt_signup: TextView
     private lateinit var showPasswordButton: ImageView
+    private lateinit var closeTermsConditions: ImageView
+    private lateinit var backToStartButton: ImageView
     private lateinit var signin: Button
     private lateinit var termsAndConditionsBtn: TextView
 
@@ -42,6 +44,8 @@ class SignInActivity : AppCompatActivity() {
         txt_signup = findViewById(R.id.txt_signup)
         signin = findViewById(R.id.signin)
         termsAndConditionsBtn = findViewById(R.id.terms_and_conditions_btn)
+        closeTermsConditions = findViewById(R.id.closeTermsCond)
+        backToStartButton = findViewById(R.id.backToStart)
         progressBar = findViewById(R.id.progress_bar)
         toolbar = findViewById(R.id.toolbar)
 
@@ -51,9 +55,12 @@ class SignInActivity : AppCompatActivity() {
         termsAndConditionsBtn.setOnClickListener {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+        closeTermsConditions.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
 
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back)
-        toolbar.setNavigationOnClickListener {
+
+        backToStartButton.setOnClickListener {
             startActivity(
                 Intent(
                     applicationContext,

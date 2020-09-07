@@ -2,6 +2,7 @@ package com.android.sonder_app.Fragment
 
 import Adapter.PostAdapter
 import Adapter.StoryAdapter
+import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.ShapeDrawable
@@ -13,17 +14,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.sonder_app.AddStoryActivity
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.Story
 import com.android.sonder_app.Model.User
 
 import com.android.sonder_app.R
+import com.android.sonder_app.StoryActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -42,12 +46,15 @@ class HomeFragment : Fragment() {
     private lateinit var followingList: ArrayList<String>
     private lateinit var progressBar: ProgressBar
 
+    private lateinit var flashButton: ImageView
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
+        flashButton = view.findViewById(R.id.flashView)
         progressBar = view.findViewById(R.id.progress_circular)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -67,6 +74,11 @@ class HomeFragment : Fragment() {
         postLists = ArrayList()
         postAdapter = PostAdapter(context!!,postLists)
         recyclerView.adapter = postAdapter
+
+        flashButton.setOnClickListener {
+            val intent = Intent(context, AddStoryActivity::class.java)
+            context!!.startActivity(intent)
+        }
 
         checkFollowing()
         return view
