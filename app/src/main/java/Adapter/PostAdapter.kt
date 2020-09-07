@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.CommentsActivity
+import com.android.sonder_app.EditPostActivity
 import com.android.sonder_app.FollowersActivity
 import com.android.sonder_app.Fragment.ProfileFragment
 import com.android.sonder_app.Model.Post
@@ -61,6 +62,8 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
                 intent.data = Uri.parse(post.getLink())
                 mContext.startActivity(intent)
             }
+        } else {
+            holder.readMore.visibility = View.GONE
         }
 
 
@@ -110,13 +113,14 @@ class PostAdapter : RecyclerView.Adapter<PostAdapter.ViewHolder> {
                     override fun onMenuItemClick(item: MenuItem?): Boolean {
                         when (item!!.itemId) {
                             R.id.post_edit -> {
-                                Toast.makeText(mContext, "Edit clicked", Toast.LENGTH_SHORT)
-                                    .show()
+                                Toast.makeText(mContext, "Edit clicked", Toast.LENGTH_SHORT).show()
+                                val intent = Intent(mContext, EditPostActivity::class.java)
+                                intent.putExtra("postid", post.getPostid())
+                                mContext.startActivity(intent)
                                 return true
                             }
                             R.id.post_delete -> {
-                                Toast.makeText(mContext, "Delete clicked", Toast.LENGTH_SHORT)
-                                    .show()
+                                Toast.makeText(mContext, "Delete clicked", Toast.LENGTH_SHORT).show()
                                 deletePost(post.getPostid())
                                 return true
                             }

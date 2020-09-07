@@ -14,8 +14,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.android.sonder_app.Model.User
 import com.bumptech.glide.Glide
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
@@ -126,7 +124,7 @@ class EditProfileActivity : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val downloadUri = task.result
                     val myUrl = downloadUri.toString()
-                    val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.getUid())
+                    val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.uid)
 
                     val hashMap: HashMap<String, String> = HashMap<String, String>()
                     hashMap["imageurl"] = myUrl

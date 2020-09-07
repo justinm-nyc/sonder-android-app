@@ -172,12 +172,47 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
         categories.add("Entertainment")
         categories.add("Shopping")
 
-        val subCategories = ArrayList<String>()
-        subCategories.add("Select Sub Category")
-        subCategories.add("BARS")
-        subCategories.add("ROOF TOPS")
-        subCategories.add("NIGHTCLUBS")
-        subCategories.add("EVENTS")
+        val foodSubCat = ArrayList<String>()
+        foodSubCat.add("Select Sub Category")
+        foodSubCat.add("BURGERS")
+        foodSubCat.add("VEGAN")
+        foodSubCat.add("PIZZA")
+        foodSubCat.add("ROMANTIC")
+        foodSubCat.add("FAST FOOD")
+        foodSubCat.add("LOCAL")
+
+        val outdoorSubCat = ArrayList<String>()
+        outdoorSubCat.add("Select Sub Category")
+        outdoorSubCat.add("CAMPING")
+        outdoorSubCat.add("CYCLING")
+        outdoorSubCat.add("TRECKING")
+        outdoorSubCat.add("ROCK CLIMBING")
+        outdoorSubCat.add("PARK")
+
+        val nightlifeSubCat = ArrayList<String>()
+        nightlifeSubCat.add("Select Sub Category")
+        nightlifeSubCat.add("BARS")
+        nightlifeSubCat.add("ROOF TOPS")
+        nightlifeSubCat.add("NIGHTCLUBS")
+        nightlifeSubCat.add("EVENTS")
+
+        val entertainmentSubCat = ArrayList<String>()
+        entertainmentSubCat.add("Select Sub Category")
+        entertainmentSubCat.add("ATTRACTIONS")
+        entertainmentSubCat.add("MUSEUMS")
+        entertainmentSubCat.add("MONUMENTS")
+        entertainmentSubCat.add("WELLNESS")
+
+        val shoppingSubCat = ArrayList<String>()
+        shoppingSubCat.add("Select Sub Category")
+        shoppingSubCat.add("WOMEN")
+        shoppingSubCat.add("MEN")
+        shoppingSubCat.add("CHILDREN")
+        shoppingSubCat.add("SPORTS")
+
+        var subCategoryAdapter: ArrayAdapter<String> = ArrayAdapter(applicationContext, R.layout.spinner_item, foodSubCat)
+        subCategorySpinner.adapter = subCategoryAdapter
+        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         val categoryAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, categories)
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -191,21 +226,39 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
                 position: Int,
                 id: Long
             ) {
-                selectedCategory = when {
-                    categorySpinner.selectedItem != "Select Category" -> {
-                        categorySpinner.selectedItem.toString()
-                    }
-                    else -> {
-                        ""
+
+                when(categorySpinner.selectedItem) {
+                    "Select Category" -> {
+                        selectedCategory = ""
+                    } else -> {
+                        selectedCategory = categorySpinner.selectedItem.toString()
+                        when(categorySpinner.selectedItemPosition) {
+                            0,1 -> {
+                                subCategoryAdapter = ArrayAdapter(applicationContext, R.layout.spinner_item, foodSubCat)
+                            }
+                            2 -> {
+                                subCategoryAdapter = ArrayAdapter(applicationContext, R.layout.spinner_item, outdoorSubCat)
+                            }
+                            3 -> {
+                                subCategoryAdapter = ArrayAdapter(applicationContext, R.layout.spinner_item, nightlifeSubCat)
+                            }
+                            4 -> {
+                                subCategoryAdapter = ArrayAdapter(applicationContext, R.layout.spinner_item, entertainmentSubCat)
+                            }
+                            5-> {
+                                subCategoryAdapter = ArrayAdapter(applicationContext, R.layout.spinner_item, shoppingSubCat)
+                            }
+                        }
+                    subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    subCategorySpinner.adapter = subCategoryAdapter
                     }
                 }
+
+
             }
 
         }
 
-        val subCategoryAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, subCategories)
-        subCategoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        subCategorySpinner.adapter = subCategoryAdapter
         subCategorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
 
@@ -222,6 +275,13 @@ class PostActivity : AppCompatActivity(), OnMapReadyCallback {
                     else -> {
                         ""
                     }
+                }
+                when(subCategorySpinner.selectedItem) {
+                    "Select Sub Category" -> {
+                        selectedSubCategory = ""
+                    } else -> {
+                        selectedSubCategory = subCategorySpinner.selectedItem.toString()
+                }
                 }
             }
 
