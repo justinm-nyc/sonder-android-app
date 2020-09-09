@@ -11,8 +11,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.android.sonder_app.ConversationActivity
 import com.android.sonder_app.Fragment.ProfileFragment
 import com.android.sonder_app.MainActivity
+import com.android.sonder_app.MessageActivity
 import com.android.sonder_app.Model.User
 import com.android.sonder_app.R
 import com.bumptech.glide.Glide
@@ -31,11 +33,13 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder> {
     private var mUser: List<User>
     private lateinit var firebaseUser: FirebaseUser
     private var isFragments: Boolean = false
+    private var isChat: Boolean = false
 
-    constructor(mContext: Context, mUser: List<User>, isFragments: Boolean) : super() {
+    constructor(mContext: Context, mUser: List<User>, isFragments: Boolean, isChat: Boolean) : super() {
         this.mContext = mContext
         this.mUser = mUser
         this.isFragments = isFragments
+        this.isChat = isChat
     }
 
 
@@ -46,7 +50,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
 
     private fun addNotifications(userid: String) {
-        var reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid)
+        val reference = FirebaseDatabase.getInstance().getReference("Notifications").child(userid)
         val hashMap: HashMap<String, Any> = HashMap<String, Any>()
         hashMap["userid"] = firebaseUser.uid
         hashMap["text"] = "started following you"
@@ -62,49 +66,59 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder> {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
         val user: User = mUser[position]
-        holder.btn_follow?.visibility = View.VISIBLE
         holder.username?.text = user.getUsername()
         holder.fullname?.text = user.getFullname()
         Glide.with(mContext).load(user.getImageurl()).into(holder.image_profile!!)
 
-        isFollowing(user.getId(), holder.btn_follow!!)
+        //If this is not a chat then this will e used in search, followers, and follow components
+        if(!isChat) {
+            holder.btn_follow?.visibility = View.VISIBLE
+            isFollowing(user.getId(), holder.btn_follow!!)
 
-        if (user.getId() == firebaseUser.uid) {
-            holder.btn_follow!!.visibility = View.GONE
+            if (user.getId() == firebaseUser.uid) {
+                holder.btn_follow!!.visibility = View.GONE
+            }
+
+            holder.itemView.setOnClickListener {
+                if(isFragments) {
+                    val editor: SharedPreferences.Editor =
+                        mContext.getSharedPreferences("PREPS", Context.MODE_PRIVATE).edit()
+                    editor.putString("profileid", user.getId())
+                    editor.apply()
+
+                    (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ProfileFragment()).commit()
+                } else {
+                    val intent: Intent = Intent(mContext, MainActivity::class.java)
+                    intent.putExtra("publisherid",user.getId())
+                    mContext.startActivity(intent)
+                }
+            }
+
+            holder.btn_follow?.setOnClickListener {
+                Log.w(TAG, "Follow Button pressed");
+                if (holder.btn_follow!!.text.toString() == "follow") {
+                    Log.w(TAG, "holder.btn_follow!!.text.toString() == follow");
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
+                        .child("following").child(user.getId()).setValue(true)
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(user.getId())
+                        .child("followers").child(firebaseUser.uid).setValue(true);
+                    addNotifications(user.getId())
+                } else {
+                    Log.w(TAG, "holder.btn_follow!!.text.toString() IS NOT follow")
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
+                        .child("following").child(user.getId()).removeValue()
+                    FirebaseDatabase.getInstance().reference.child("Follow").child(user.getId())
+                        .child("followers").child(firebaseUser.uid).removeValue()
+                }
+            }
         }
-
-        holder.itemView.setOnClickListener {
-            if(isFragments) {
-                val editor: SharedPreferences.Editor =
-                    mContext.getSharedPreferences("PREPS", Context.MODE_PRIVATE).edit()
-                editor.putString("profileid", user.getId())
-                editor.apply()
-
-                (mContext as FragmentActivity).supportFragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, ProfileFragment()).commit()
-            } else {
-                var intent: Intent = Intent(mContext, MainActivity::class.java)
-                intent.putExtra("publisherid",user.getId())
+        else {
+           holder.itemView.setOnClickListener {
+               val intent = Intent(mContext, ConversationActivity::class.java)
+               intent.putExtra("userid", user.getId())
                 mContext.startActivity(intent)
-            }
-        }
-
-        holder.btn_follow?.setOnClickListener {
-            Log.w(TAG, "Follow Button pressed");
-            if (holder.btn_follow!!.text.toString() == "follow") {
-                Log.w(TAG, "holder.btn_follow!!.text.toString() == follow");
-                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
-                    .child("following").child(user.getId()).setValue(true);
-                FirebaseDatabase.getInstance().reference.child("Follow").child(user.getId())
-                    .child("followers").child(firebaseUser.uid).setValue(true);
-                addNotifications(user.getId())
-            } else {
-                Log.w(TAG, "holder.btn_follow!!.text.toString() IS NOT follow");
-                FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
-                    .child("following").child(user.getId()).removeValue();
-                FirebaseDatabase.getInstance().reference.child("Follow").child(user.getId())
-                    .child("followers").child(firebaseUser.uid).removeValue();
-            }
+           }
         }
     }
 
@@ -122,8 +136,8 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder> {
         }
     }
 
-    fun isFollowing(userid: String, button: Button) {
-        var reference =
+    private fun isFollowing(userid: String, button: Button) {
+        val reference =
             FirebaseDatabase.getInstance().reference.child("Follow").child(firebaseUser.uid)
                 .child("following")
 

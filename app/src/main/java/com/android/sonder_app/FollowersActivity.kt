@@ -23,7 +23,7 @@ class FollowersActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_followers)
 
-        var intent: Intent = intent
+        val intent: Intent = intent
         id = intent.getStringExtra("id")!!
         title = intent.getStringExtra("title")!!
         val toolbar: Toolbar = findViewById(R.id.toolbar)
@@ -39,7 +39,7 @@ class FollowersActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         userList = ArrayList()
-        userAdapter = UserAdapter(this, userList, false)
+        userAdapter = UserAdapter(this, userList, false, false)
         recyclerView.adapter = userAdapter
 
         idList = ArrayList()

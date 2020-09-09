@@ -1,6 +1,7 @@
 package com.android.sonder_app
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
@@ -78,6 +79,61 @@ class EditPostActivity : AppCompatActivity(), OnMapReadyCallback {
         selectLocationButton = findViewById(R.id.select_location_button)
         mapFragment = supportFragmentManager.findFragmentById(R.id.google_map) as SupportMapFragment
 
+        mapFragment.getMapAsync(this)
+
+        taggedList = HashMap()
+        //FOR TESTING PURPOSES
+        taggedList["XTICi9lfBddQHBwhkPg1OCwnXyi1"] = true
+
+        selectedLocationEdit = ""
+        selectedCategoryEdit = ""
+        selectedSubCategoryEdit = ""
+
+        val categories = ArrayList<String>()
+        categories.add("Select Category")
+        categories.add("Food")
+        categories.add("Outdoor")
+        categories.add("Nightlife")
+        categories.add("Entertainment")
+        categories.add("Shopping")
+
+        val foodSubCat = ArrayList<String>()
+        foodSubCat.add("Select Sub Category")
+        foodSubCat.add("BURGERS")
+        foodSubCat.add("VEGAN")
+        foodSubCat.add("PIZZA")
+        foodSubCat.add("ROMANTIC")
+        foodSubCat.add("FAST FOOD")
+        foodSubCat.add("LOCAL")
+
+        val outdoorSubCat = ArrayList<String>()
+        outdoorSubCat.add("Select Sub Category")
+        outdoorSubCat.add("CAMPING")
+        outdoorSubCat.add("CYCLING")
+        outdoorSubCat.add("TRECKING")
+        outdoorSubCat.add("ROCK CLIMBING")
+        outdoorSubCat.add("PARK")
+
+        val nightlifeSubCat = ArrayList<String>()
+        nightlifeSubCat.add("Select Sub Category")
+        nightlifeSubCat.add("BARS")
+        nightlifeSubCat.add("ROOF TOPS")
+        nightlifeSubCat.add("NIGHTCLUBS")
+        nightlifeSubCat.add("EVENTS")
+
+        val entertainmentSubCat = ArrayList<String>()
+        entertainmentSubCat.add("Select Sub Category")
+        entertainmentSubCat.add("ATTRACTIONS")
+        entertainmentSubCat.add("MUSEUMS")
+        entertainmentSubCat.add("MONUMENTS")
+        entertainmentSubCat.add("WELLNESS")
+
+        val shoppingSubCat = ArrayList<String>()
+        shoppingSubCat.add("Select Sub Category")
+        shoppingSubCat.add("WOMEN")
+        shoppingSubCat.add("MEN")
+        shoppingSubCat.add("CHILDREN")
+        shoppingSubCat.add("SPORTS")
 
         locationEdit.setOnClickListener {
             selectLocationViewEdit.visibility = View.VISIBLE
@@ -141,62 +197,12 @@ class EditPostActivity : AppCompatActivity(), OnMapReadyCallback {
                 return false
             }
         })
-        mapFragment.getMapAsync(this)
 
-
-        taggedList = HashMap()
-        //FOR TESTING PURPOSES
-        taggedList["XTICi9lfBddQHBwhkPg1OCwnXyi1"] = true
-
-        selectedLocationEdit = ""
-        selectedCategoryEdit = ""
-        selectedSubCategoryEdit = ""
-
-        val categories = ArrayList<String>()
-        categories.add("Select Category")
-        categories.add("Food")
-        categories.add("Outdoor")
-        categories.add("Nightlife")
-        categories.add("Entertainment")
-        categories.add("Shopping")
-
-        val foodSubCat = ArrayList<String>()
-        foodSubCat.add("Select Sub Category")
-        foodSubCat.add("BURGERS")
-        foodSubCat.add("VEGAN")
-        foodSubCat.add("PIZZA")
-        foodSubCat.add("ROMANTIC")
-        foodSubCat.add("FAST FOOD")
-        foodSubCat.add("LOCAL")
-
-        val outdoorSubCat = ArrayList<String>()
-        outdoorSubCat.add("Select Sub Category")
-        outdoorSubCat.add("CAMPING")
-        outdoorSubCat.add("CYCLING")
-        outdoorSubCat.add("TRECKING")
-        outdoorSubCat.add("ROCK CLIMBING")
-        outdoorSubCat.add("PARK")
-
-        val nightlifeSubCat = ArrayList<String>()
-        nightlifeSubCat.add("Select Sub Category")
-        nightlifeSubCat.add("BARS")
-        nightlifeSubCat.add("ROOF TOPS")
-        nightlifeSubCat.add("NIGHTCLUBS")
-        nightlifeSubCat.add("EVENTS")
-
-        val entertainmentSubCat = ArrayList<String>()
-        entertainmentSubCat.add("Select Sub Category")
-        entertainmentSubCat.add("ATTRACTIONS")
-        entertainmentSubCat.add("MUSEUMS")
-        entertainmentSubCat.add("MONUMENTS")
-        entertainmentSubCat.add("WELLNESS")
-
-        val shoppingSubCat = ArrayList<String>()
-        shoppingSubCat.add("Select Sub Category")
-        shoppingSubCat.add("WOMEN")
-        shoppingSubCat.add("MEN")
-        shoppingSubCat.add("CHILDREN")
-        shoppingSubCat.add("SPORTS")
+        close.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         val categoryAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, categories)
         categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

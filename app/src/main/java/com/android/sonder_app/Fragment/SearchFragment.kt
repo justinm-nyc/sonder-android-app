@@ -36,7 +36,7 @@ class SearchFragment : Fragment() {
         search_bar = view.findViewById(R.id.search_bar);
         mUsers = ArrayList<User>()
 
-        userAdapter = UserAdapter(context!!, mUsers, true);
+        userAdapter = UserAdapter(context!!, mUsers, true, false);
         recyclerView.adapter = userAdapter;
 
         readUsers()
@@ -59,7 +59,7 @@ class SearchFragment : Fragment() {
     }
 
     private fun searchUsers(s: String){
-        var query: Query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
+        val query: Query = FirebaseDatabase.getInstance().getReference("Users").orderByChild("username")
             .startAt(s)
             .endAt(s+"\uf8ff")
 
@@ -86,7 +86,7 @@ class SearchFragment : Fragment() {
             }
 
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if(search_bar.getText().toString().equals("")){
+                if(search_bar.text.toString() == ""){
                     mUsers.clear()
 
                     for(snapshot in dataSnapshot.children){

@@ -3,31 +3,20 @@ package com.android.sonder_app.Fragment
 import Adapter.PostAdapter
 import Adapter.StoryAdapter
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.LayerDrawable
-import android.graphics.drawable.ShapeDrawable
-import android.graphics.drawable.shapes.RoundRectShape
-import android.os.Build
 import android.os.Bundle
-import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
-import androidx.annotation.ColorRes
-import androidx.annotation.DimenRes
-import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.AddStoryActivity
+import com.android.sonder_app.MessageActivity
 import com.android.sonder_app.Model.Post
 import com.android.sonder_app.Model.Story
-import com.android.sonder_app.Model.User
-
 import com.android.sonder_app.R
-import com.android.sonder_app.StoryActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
@@ -35,7 +24,6 @@ import com.google.firebase.database.*
  * A simple [Fragment] subclass.
  */
 class HomeFragment : Fragment() {
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var postAdapter: PostAdapter
     private lateinit var postLists: ArrayList<Post>
@@ -47,6 +35,7 @@ class HomeFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
 
     private lateinit var flashButton: ImageView
+    private lateinit var messageButton: ImageView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,7 +43,8 @@ class HomeFragment : Fragment() {
     ): View? {
         val view: View = inflater.inflate(R.layout.fragment_home, container, false)
 
-        flashButton = view.findViewById(R.id.flashView)
+        flashButton = view.findViewById(R.id.flash_view)
+        messageButton = view.findViewById(R.id.message_button)
         progressBar = view.findViewById(R.id.progress_circular)
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.setHasFixedSize(true)
@@ -77,6 +67,11 @@ class HomeFragment : Fragment() {
 
         flashButton.setOnClickListener {
             val intent = Intent(context, AddStoryActivity::class.java)
+            context!!.startActivity(intent)
+        }
+
+        messageButton.setOnClickListener {
+            val intent = Intent(context, MessageActivity::class.java)
             context!!.startActivity(intent)
         }
 
