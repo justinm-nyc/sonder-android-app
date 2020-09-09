@@ -31,9 +31,9 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder> {
 
     private var mContext: Context
     private var mUser: List<User>
-    private lateinit var firebaseUser: FirebaseUser
     private var isFragments: Boolean = false
     private var isChat: Boolean = false
+    private lateinit var firebaseUser: FirebaseUser
 
     constructor(mContext: Context, mUser: List<User>, isFragments: Boolean, isChat: Boolean) : super() {
         this.mContext = mContext

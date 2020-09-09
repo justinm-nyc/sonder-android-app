@@ -129,6 +129,7 @@ class SignInActivity : AppCompatActivity() {
                             reference.addValueEventListener(menuListener)
 
                         } else {
+                            progressBar.visibility = View.GONE;
                             Log.d(TAG, "signInWithEmailAndPassword:failure", task.exception);
                             // If sign in fails, display a message to the user.
                             Toast.makeText(
