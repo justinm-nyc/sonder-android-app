@@ -181,7 +181,7 @@ class SignUpActivity : AppCompatActivity() {
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception);
+                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
                     // If sign in fails, display a message to the user.
                     Toast.makeText(
                         baseContext, "You are not registered with this email and password!",

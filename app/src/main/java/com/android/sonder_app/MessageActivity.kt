@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import androidx.viewpager.widget.ViewPager
+import com.android.sonder_app.Fragment.ChatFragment
 import com.android.sonder_app.Fragment.UserFragment
 import com.google.android.material.tabs.TabLayout
 
