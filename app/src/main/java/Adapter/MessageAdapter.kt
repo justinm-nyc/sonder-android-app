@@ -1,6 +1,7 @@
 package Adapter
 
 import android.content.Context
+import android.opengl.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +47,15 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
         val message: Message = mMessage[position]
         holder.showMessage.text = message.getMessage()
         Glide.with(mContext).load(imageurl).into(holder.imageProfile)
+        if(position == mMessage.size -1){
+            if(message.isIsSeen()){
+                holder.textSeen.text = "Seen"
+            } else {
+                holder.textSeen.text = "Delivered"
+            }
+        } else {
+            holder.textSeen.visibility = View.GONE
+        }
     }
 
 
@@ -56,7 +66,7 @@ class MessageAdapter : RecyclerView.Adapter<MessageAdapter.ViewHolder> {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var showMessage: TextView = itemView.findViewById(R.id.show_message)
         var imageProfile: CircleImageView = itemView.findViewById(R.id.image_profile)
-
+        var textSeen: TextView = itemView.findViewById(R.id.text_seen)
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -39,7 +39,7 @@ class FollowersActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(this)
         userList = ArrayList()
-        userAdapter = UserAdapter(this, userList, false, false)
+        userAdapter = UserAdapter(this, userList, false, false, false)
         recyclerView.adapter = userAdapter
 
         idList = ArrayList()

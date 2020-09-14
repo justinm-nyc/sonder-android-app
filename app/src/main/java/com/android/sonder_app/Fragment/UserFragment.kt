@@ -71,7 +71,7 @@ class UserFragment : Fragment() {
                         }
                     }
 
-                    userAdapter = UserAdapter(context!!, mUsers, false, true)
+                    userAdapter = UserAdapter(context!!, mUsers, false, true, false)
                     recyclerView.adapter = userAdapter
                 } else {
                     readUsers()
@@ -96,7 +96,7 @@ class UserFragment : Fragment() {
                         mUsers.add(user)
                     }
                 }
-                userAdapter = UserAdapter(context!!, mUsers, false, true)
+                userAdapter = UserAdapter(context!!, mUsers, false, true, false)
                 recyclerView.adapter = userAdapter
             }
         })

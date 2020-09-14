@@ -4,11 +4,13 @@ class Message {
     private lateinit var sender: String
     private lateinit var receiver: String
     private lateinit var message: String
+    private var isseen: Boolean = false
 
-    constructor(sender: String, receiver: String, message: String) {
+    constructor(sender: String, receiver: String, message: String, isseen: Boolean) {
         this.sender = sender
         this.receiver = receiver
         this.message = message
+        this.isseen = isseen
     }
 
     constructor()
@@ -37,4 +39,12 @@ class Message {
         this.message = message
     }
 
+
+    fun isIsSeen(): Boolean {
+        return isseen
+    }
+
+    fun setIsSeen(isseen: Boolean) {
+        this.isseen = isseen
+    }
 }

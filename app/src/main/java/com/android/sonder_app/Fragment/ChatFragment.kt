@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.sonder_app.Model.Message
+import com.android.sonder_app.Model.MessageList
 import com.android.sonder_app.Model.User
 import com.android.sonder_app.R
 import com.google.firebase.auth.FirebaseAuth
@@ -27,7 +28,7 @@ class ChatFragment : Fragment() {
     private lateinit var firebaseUser: FirebaseUser
     private lateinit var reference: DatabaseReference
 
-    private lateinit var usersList: ArrayList<String>
+    private lateinit var usersList: ArrayList<MessageList>
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,69 +40,48 @@ class ChatFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser()!!
+        firebaseUser = FirebaseAuth.getInstance().currentUser!!
 
         usersList = ArrayList()
 
-        reference = FirebaseDatabase.getInstance().getReference("Chats")
-        reference.addValueEventListener(object: ValueEventListener {
-            override fun onCancelled(error: DatabaseError) {}
-
+        reference = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.uid)
+        reference.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 usersList.clear()
                 for(snapshot in dataSnapshot.children) {
-                    val message = snapshot.getValue(Message::class.java)
-                    if(message!!.getSender() == firebaseUser.uid) {
-                        usersList.add(message.getReceiver())
-                    }
-                    if(message!!.getReceiver() == firebaseUser.uid) {
-                        usersList.add(message.getSender())
-                    }
+                    val messageList = snapshot.getValue(MessageList::class.java)
+                    usersList.add(messageList!!)
                 }
-                readMessages()
+                messageList()
             }
 
-        })
+            override fun onCancelled(error: DatabaseError) {}
 
+        })
         return view
     }
 
-    private fun readMessages() {
+    private fun messageList() {
         mUsers = ArrayList()
-
         reference = FirebaseDatabase.getInstance().getReference("Users")
-        reference.addValueEventListener(object: ValueEventListener {
+        reference.addValueEventListener(object: ValueEventListener{
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 mUsers.clear()
-
                 for(snapshot in dataSnapshot.children) {
                     val user = snapshot.getValue(User::class.java)
-
-                    //Display 1 user from chats
-                    for(id in usersList){
-                        if(user!!.getId() == id){
-                            if(mUsers.size != 0) {
-                                Log.w(TAG, mUsers.size.toString());
-                                for(i in 0 until mUsers.size) {
-                                    val user1 = mUsers[i]
-                                    if(user.getId() != user1.getId()) {
-                                        mUsers.add(user)
-                                    }
-                                }
-                            } else {
-                                //ONLY ADD IF IS NOT ALREADY IN mUSERS
-                                mUsers.add(user)
-                            }
+                    for(messageList in usersList) {
+                        if(user!!.getId() == messageList.getId()){
+                            mUsers.add(user)
                         }
                     }
                 }
-                Log.w(TAG, mUsers.size.toString());
-                userAdapter = UserAdapter(context!!, mUsers, false, true)
+                userAdapter = UserAdapter(context!!, mUsers, true, true, true)
                 recyclerView.adapter = userAdapter
             }
 
             override fun onCancelled(error: DatabaseError) {}
-        })
 
+        })
     }
+
 }

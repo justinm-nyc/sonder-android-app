@@ -27,6 +27,8 @@ class ConversationActivity : AppCompatActivity() {
     private lateinit var btnSend: ImageView
     private lateinit var textSend: EditText
 
+    private lateinit var userid: String
+
     private lateinit var messageAdapter: MessageAdapter
     private lateinit var mMessage: ArrayList<Message>
 
@@ -34,6 +36,8 @@ class ConversationActivity : AppCompatActivity() {
 
     private lateinit var firebaseUser: FirebaseUser
     private lateinit var reference: DatabaseReference
+
+    private lateinit var seenListener: ValueEventListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +63,7 @@ class ConversationActivity : AppCompatActivity() {
         textSend = findViewById(R.id.text_send)
 
         firebaseUser = FirebaseAuth.getInstance().currentUser!!
-        val userid = intent.getStringExtra("userid")
+        userid = intent.getStringExtra("userid")
 
         reference = FirebaseDatabase.getInstance().getReference("Users").child(userid!!)
         reference.addValueEventListener(object : ValueEventListener {
@@ -67,13 +71,15 @@ class ConversationActivity : AppCompatActivity() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val user: User = snapshot.getValue(User::class.java)!!
                 username.text = user.getUsername()
-                Glide.with(this@ConversationActivity).load(user.getImageurl()).into(profileImage)
+                Glide.with(applicationContext).load(user.getImageurl()).into(profileImage)
 
                 readMessages(firebaseUser.uid, userid, user.getImageurl())
             }
 
             override fun onCancelled(error: DatabaseError) {}
         })
+
+        seenMessage(userid)
 
         btnSend.setOnClickListener {
             val msg = textSend.text.toString()
@@ -85,14 +91,55 @@ class ConversationActivity : AppCompatActivity() {
 
     }
 
+    private fun seenMessage(userid: String) {
+        reference = FirebaseDatabase.getInstance().getReference("Chats")
+        seenListener = reference.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for(snapshot in dataSnapshot.children) {
+                    val message: Message = snapshot.getValue(Message::class.java)!!
+                    if(message.getReceiver() == firebaseUser.uid && message.getSender() == userid) {
+                        val hashMap: HashMap<String, Any> = HashMap()
+                        hashMap["isseen"] = true
+                        snapshot.ref.updateChildren(hashMap)
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+    }
+
     private fun sendMessage(sender: String, receiver: String, message: String) {
         val reference = FirebaseDatabase.getInstance().reference
         val hashMap = HashMap<String, Any>()
         hashMap["sender"] = sender
         hashMap["receiver"] = receiver
         hashMap["message"] = message
+        hashMap["isseen"] = false
 
         reference.child("Chats").push().setValue(hashMap)
+
+        val chatRef = FirebaseDatabase.getInstance().getReference("Chatlist").child(firebaseUser.uid).child(userid)
+        chatRef.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(!snapshot.exists()) {
+                    chatRef.child("id").setValue(userid)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
+
+        val chatRefReverse = FirebaseDatabase.getInstance().getReference("Chatlist").child(userid).child(firebaseUser.uid)
+        chatRef.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if(!snapshot.exists()) {
+                    chatRefReverse.child("id").setValue(firebaseUser.uid)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     private fun readMessages(myid: String, userid: String, imageurl: String) {
@@ -116,5 +163,10 @@ class ConversationActivity : AppCompatActivity() {
 
             override fun onCancelled(error: DatabaseError) {}
         })
+    }
+
+    override fun onPause() {
+        super.onPause()
+        reference.removeEventListener(seenListener)
     }
 }
