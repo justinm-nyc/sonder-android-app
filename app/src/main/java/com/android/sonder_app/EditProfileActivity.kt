@@ -86,18 +86,28 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         save.setOnClickListener{
-            updateProfile(fullname.text.toString(),username.text.toString(), bio.text.toString())
-            finish()
+            if(updateProfile(fullname.text.toString(),username.text.toString(), bio.text.toString())){
+                finish()
+            }
         }
     }
 
-    private fun updateProfile(fullname: String, username: String, bio: String) {
-        val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.uid)
-        val hashMap: HashMap<String, String> = HashMap()
-        hashMap["fullname"] = fullname
-        hashMap["username"] = username
-        hashMap["bio"] = bio
-        reference.updateChildren(hashMap as Map<String, Any>)
+    private fun updateProfile(fullname: String, username: String, bio: String): Boolean {
+        if(username == ""){
+            Toast.makeText(this, "Username cannot be empty!", Toast.LENGTH_SHORT).show()
+            return false
+        } else if(fullname == ""){
+            Toast.makeText(this, "Name cannot be empty!", Toast.LENGTH_SHORT).show()
+            return false
+        } else{
+            val reference: DatabaseReference = FirebaseDatabase.getInstance().getReference("Users").child(firebaseUser.uid)
+            val hashMap: HashMap<String, String> = HashMap()
+            hashMap["fullname"] = fullname
+            hashMap["username"] = username
+            hashMap["bio"] = bio
+            reference.updateChildren(hashMap as Map<String, Any>)
+            return true
+        }
     }
 
     private fun getFileExtension(uri: Uri): String? {

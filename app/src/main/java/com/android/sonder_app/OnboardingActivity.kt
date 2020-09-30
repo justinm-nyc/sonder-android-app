@@ -37,11 +37,11 @@ class OnboardingActivity : AppCompatActivity() {
         mSlideViewPager.addOnPageChangeListener(viewListener)
 
         mNextBtn.setOnClickListener{
-            mSlideViewPager.setCurrentItem(mCurrentPage + 1)
+            mSlideViewPager.currentItem = mCurrentPage + 1
         }
 
         mBackBtn.setOnClickListener{
-            mSlideViewPager.setCurrentItem(mCurrentPage - 1)
+            mSlideViewPager.currentItem = mCurrentPage - 1
         }
     }
 

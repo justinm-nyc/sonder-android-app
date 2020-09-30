@@ -105,7 +105,6 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         signup.setOnClickListener {
-
             progressBar.visibility = View.VISIBLE; // To show the ProgressBar
 
             val strUsername = username.text.toString()
@@ -113,8 +112,6 @@ class SignUpActivity : AppCompatActivity() {
             val strEmail = email.text.toString()
             val strPassword = password.text.toString()
             val strConfirmPassword = confirmPassword.text.toString()
-
-
 
             if (TextUtils.isEmpty(strUsername) || TextUtils.isEmpty(strFullName) || TextUtils.isEmpty(
                     strEmail
@@ -162,7 +159,7 @@ class SignUpActivity : AppCompatActivity() {
                     reference =
                         FirebaseDatabase.getInstance().reference.child("Users").child(userid)
 
-                    var hashMap: HashMap<String, Any> = HashMap()
+                    val hashMap: HashMap<String, Any> = HashMap()
                     hashMap["id"] = userid
                     hashMap["username"] = username.toLowerCase(Locale.ROOT)
                     hashMap["fullname"] = fullname

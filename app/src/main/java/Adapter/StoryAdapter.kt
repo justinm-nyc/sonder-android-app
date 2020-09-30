@@ -41,12 +41,12 @@ class StoryAdapter : RecyclerView.Adapter<StoryAdapter.ViewHolder> {
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
         if (i == 0) {
-            Log.d(TAG, "i = 0");
+            Log.d(TAG, "i = 0")
             val view: View =
                 LayoutInflater.from(mContext).inflate(R.layout.add_story_item, viewGroup, false)
             return ViewHolder(view)
         } else {
-            Log.d(TAG, "i != 0");
+            Log.d(TAG, "i != 0")
             val view: View =
                 LayoutInflater.from(mContext).inflate(R.layout.story_item, viewGroup, false)
             return ViewHolder(view)
@@ -124,25 +124,25 @@ class StoryAdapter : RecyclerView.Adapter<StoryAdapter.ViewHolder> {
                         val alertDialog: AlertDialog = AlertDialog.Builder(mContext).create()
                         alertDialog.setButton(
                             AlertDialog.BUTTON_NEGATIVE,
-                            "View story",
-                            DialogInterface.OnClickListener { dialogInterface: DialogInterface, i: Int ->
-                                val intent = Intent(mContext, StoryActivity::class.java)
-                                intent.putExtra(
-                                    "userid",
-                                    FirebaseAuth.getInstance().currentUser!!.uid
-                                )
-                                mContext.startActivity(intent)
-                                dialogInterface.dismiss()
-                            })
+                            "View story"
+                        ) { dialogInterface: DialogInterface, i: Int ->
+                            val intent = Intent(mContext, StoryActivity::class.java)
+                            intent.putExtra(
+                                "userid",
+                                FirebaseAuth.getInstance().currentUser!!.uid
+                            )
+                            mContext.startActivity(intent)
+                            dialogInterface.dismiss()
+                        }
 
                         alertDialog.setButton(
                             AlertDialog.BUTTON_POSITIVE,
-                            "Add story",
-                            DialogInterface.OnClickListener { dialogInterface: DialogInterface, i: Int ->
-                                val intent = Intent(mContext, AddStoryActivity::class.java)
-                                mContext.startActivity(intent)
-                                dialogInterface.dismiss()
-                            })
+                            "Add story"
+                        ) { dialogInterface: DialogInterface, i: Int ->
+                            val intent = Intent(mContext, AddStoryActivity::class.java)
+                            mContext.startActivity(intent)
+                            dialogInterface.dismiss()
+                        }
                         alertDialog.show()
                     } else {
                         val intent = Intent(mContext, AddStoryActivity::class.java)
